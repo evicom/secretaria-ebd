@@ -1,0 +1,2283 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EBD — Frequência Geral 2026</title>
+<meta name="description" content="Sistema de controle de frequência da Escola Bíblica Dominical — Assembleia de Deus">
+<meta name="theme-color" content="#111827">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="EBD 2026">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="152x152" href="icons/icon-152.png">
+<link rel="apple-touch-icon" sizes="192x192" href="icons/icon-192.png">
+<link rel="apple-touch-icon" sizes="512x512" href="icons/icon-512.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="msapplication-TileImage" content="icons/icon-144.png">
+<meta name="msapplication-TileColor" content="#111827">
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@300;400;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+<style>
+:root {
+  --bg: #f0f2f5;
+  --white: #ffffff;
+  --sidebar: #111827;
+  --sidebar2: #1f2937;
+  --blue: #1e40af;
+  --blue2: #2563eb;
+  --blue3: #3b82f6;
+  --blue-light: #dbeafe;
+  --gray50: #f9fafb;
+  --gray100: #f3f4f6;
+  --gray200: #e5e7eb;
+  --gray300: #d1d5db;
+  --gray400: #9ca3af;
+  --gray600: #4b5563;
+  --gray700: #374151;
+  --gray800: #1f2937;
+  --gray900: #111827;
+  --green: #16a34a;
+  --red: #dc2626;
+  --text: #111827;
+  --sidebar-w: 256px;
+  /* soft destaque colors */
+  --dest-bg: #f8faff;
+  --dest-card: #eef2ff;
+  --dest-border: #c7d2fe;
+  --dest-label: #6366f1;
+  --dest-val: #312e81;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Source Sans 3',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;display:flex;}
+
+/* ══ LOGIN SCREEN ══ */
+#login-screen {
+  position:fixed;inset:0;background:linear-gradient(135deg,#1e1b4b 0%,#1e3a5f 60%,#0f4c75 100%);
+  display:flex;align-items:center;justify-content:center;z-index:9999;
+}
+.login-box {
+  background:#fff;border-radius:18px;padding:40px 36px;width:90%;max-width:380px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.4);text-align:center;
+}
+.login-logo {font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:#1e3a5f;letter-spacing:3px;margin-bottom:4px;}
+.login-sub {font-size:0.75rem;color:#6b7280;text-transform:uppercase;letter-spacing:2px;margin-bottom:28px;}
+.login-form .form-group {text-align:left;margin-bottom:16px;}
+.login-form label {font-size:0.72rem;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.8px;display:block;margin-bottom:5px;}
+.login-form input {
+  width:100%;padding:11px 14px;border:1.5px solid #d1d5db;border-radius:8px;
+  font-size:0.95rem;color:#111827;outline:none;transition:border-color .2s;
+}
+.login-form input:focus {border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+.login-btn {
+  width:100%;padding:12px;background:#1e3a5f;color:#fff;border:none;border-radius:8px;
+  font-family:'Source Sans 3',sans-serif;font-size:1rem;font-weight:700;cursor:pointer;
+  margin-top:8px;transition:background .2s;letter-spacing:1px;
+}
+.login-btn:hover {background:#1e40af;}
+.login-err {color:#dc2626;font-size:0.82rem;margin-top:10px;display:none;}
+#app-wrapper {display:none;}
+
+/* SIDEBAR */
+#sidebar{
+  width:var(--sidebar-w);background:var(--sidebar);min-height:100vh;
+  position:fixed;left:0;top:0;z-index:200;
+  display:flex;flex-direction:column;
+  transition:transform .3s ease;overflow-y:auto;
+}
+.sb-logo{padding:24px 20px 18px;border-bottom:1px solid rgba(255,255,255,0.07);}
+.sb-logo h1{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;color:#fff;letter-spacing:2px;line-height:1;}
+.sb-logo p{font-size:0.7rem;color:var(--gray400);margin-top:3px;text-transform:uppercase;letter-spacing:1.5px;}
+.sb-nav{padding:10px 0;flex:1;}
+.sb-section{font-size:0.62rem;text-transform:uppercase;letter-spacing:2px;color:var(--gray400);padding:14px 20px 4px;}
+.nav-item{
+  display:flex;align-items:center;gap:10px;padding:10px 20px;
+  cursor:pointer;color:rgba(255,255,255,0.6);font-size:0.86rem;font-weight:600;
+  transition:all .15s;border-left:3px solid transparent;
+}
+.nav-item:hover{background:rgba(255,255,255,0.05);color:#fff;}
+.nav-item.active{background:rgba(37,99,235,0.2);color:var(--blue3);border-left-color:var(--blue3);}
+.nav-icon{font-size:0.95rem;width:18px;text-align:center;flex-shrink:0;}
+
+/* MAIN */
+#main{margin-left:var(--sidebar-w);flex:1;min-height:100vh;display:flex;flex-direction:column;}
+.topbar{
+  background:var(--white);padding:0 24px;height:58px;
+  display:flex;align-items:center;justify-content:space-between;
+  border-bottom:1px solid var(--gray200);position:sticky;top:0;z-index:50;
+  box-shadow:0 1px 3px rgba(0,0,0,0.06);
+}
+.topbar h2{font-family:'Bebas Neue',sans-serif;font-size:1.3rem;color:var(--gray900);letter-spacing:1.5px;}
+.hamburger{display:none;flex-direction:column;gap:4px;cursor:pointer;padding:4px;}
+.hamburger span{width:22px;height:2px;background:var(--gray700);border-radius:2px;transition:all .3s;}
+.content{padding:24px;max-width:1100px;}
+
+/* OVERLAY */
+#overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:150;}
+#overlay.open{display:block;}
+
+/* PAGES */
+.page{display:none;}
+.page.active{display:block;}
+
+/* CARDS */
+.card{background:var(--white);border-radius:12px;padding:24px;margin-bottom:20px;border:1px solid var(--gray200);box-shadow:0 1px 4px rgba(0,0,0,0.05);}
+.card-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1.5px;color:var(--gray900);margin-bottom:18px;display:flex;align-items:center;gap:8px;border-bottom:2px solid var(--blue2);padding-bottom:10px;}
+
+/* FORMS */
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-group{display:flex;flex-direction:column;gap:5px;}
+.form-group.full{grid-column:1/-1;}
+label{font-size:0.73rem;font-weight:700;color:var(--gray600);text-transform:uppercase;letter-spacing:0.8px;}
+input,select,textarea{
+  padding:9px 12px;border:1.5px solid var(--gray300);border-radius:8px;
+  font-family:'Source Sans 3',sans-serif;font-size:0.9rem;color:var(--text);
+  background:#fff;transition:border-color .2s;outline:none;
+}
+input:focus,select:focus{border-color:var(--blue2);box-shadow:0 0 0 3px rgba(37,99,235,0.1);}
+input[readonly]{background:var(--gray100);color:var(--gray600);}
+
+/* BUTTONS */
+.btn{
+  padding:9px 18px;border-radius:8px;font-family:'Source Sans 3',sans-serif;
+  font-size:0.85rem;font-weight:700;cursor:pointer;border:none;
+  transition:all .15s;display:inline-flex;align-items:center;gap:7px;
+}
+.btn-blue{background:var(--blue2);color:#fff;}
+.btn-blue:hover{background:var(--blue);}
+.btn-gray{background:var(--gray200);color:var(--gray700);}
+.btn-gray:hover{background:var(--gray300);}
+.btn-green{background:var(--green);color:#fff;}
+.btn-green:hover{background:#15803d;}
+.btn-red{background:var(--red);color:#fff;}
+.btn-red:hover{background:#b91c1c;}
+.btn-dark{background:var(--gray800);color:#fff;}
+.btn-dark:hover{background:var(--gray900);}
+.btn-sm{padding:5px 12px;font-size:0.78rem;}
+.btn-outline{background:transparent;border:1.5px solid var(--gray300);color:var(--gray700);}
+.btn-outline:hover{border-color:var(--blue2);color:var(--blue2);}
+.btn-purple{background:#7c3aed;color:#fff;}
+.btn-purple:hover{background:#6d28d9;}
+
+/* TABLE */
+.data-table{width:100%;border-collapse:collapse;font-size:0.84rem;}
+.data-table th{background:var(--gray900);color:#fff;padding:9px 12px;text-align:left;font-size:0.7rem;text-transform:uppercase;letter-spacing:0.8px;font-weight:700;}
+.data-table td{padding:9px 12px;border-bottom:1px solid var(--gray100);}
+.data-table tr:hover td{background:var(--gray50);}
+
+/* BADGES */
+.badge{display:inline-block;padding:2px 8px;border-radius:6px;font-size:0.72rem;font-weight:700;}
+.badge-blue{background:var(--blue-light);color:var(--blue);}
+.badge-gray{background:var(--gray100);color:var(--gray600);}
+.badge-green{background:#dcfce7;color:#15803d;}
+.badge-red{background:#fee2e2;color:var(--red);}
+.badge-m{background:#dbeafe;color:#1d4ed8;}
+.badge-f{background:#fce7f3;color:#9d174d;}
+.badge-yellow{background:#fef9c3;color:#854d0e;}
+
+/* LIMIT COUNTER */
+.counter-bar{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+.counter-pill{background:var(--blue-light);color:var(--blue);padding:4px 12px;border-radius:20px;font-size:0.78rem;font-weight:700;}
+
+/* DOTS */
+.dot{
+  width:30px;height:30px;border-radius:50%;background:var(--gray200);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;font-weight:700;transition:all .15s;
+  user-select:none;border:2px solid transparent;flex-shrink:0;
+}
+.dot:hover{transform:scale(1.12);}
+.dot.presente{background:var(--green);color:#fff;border-color:#15803d;}
+.dot.falta{background:var(--red);color:#fff;border-color:#b91c1c;}
+
+/* FREQUÊNCIA */
+.freq-prof-block{background:var(--gray50);border:1px solid var(--gray200);border-radius:10px;padding:16px;margin-bottom:14px;}
+.freq-prof-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.freq-prof-name{font-weight:700;font-size:0.95rem;}
+.month-row{margin-bottom:10px;}
+.month-label{font-size:0.7rem;font-weight:700;color:var(--blue2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.dots-row{display:flex;flex-wrap:wrap;gap:5px;align-items:center;}
+.dot-wrap{display:flex;flex-direction:column;align-items:center;gap:2px;}
+.dot-date{font-size:0.58rem;color:var(--gray400);}
+
+/* FREQ TABS */
+.freq-tabs{display:flex;gap:0;margin-bottom:20px;border:1.5px solid var(--gray200);border-radius:10px;overflow:hidden;}
+.freq-tab{
+  flex:1;padding:10px 16px;text-align:center;cursor:pointer;
+  font-weight:700;font-size:0.84rem;color:var(--gray600);background:#fff;
+  border:none;transition:all .2s;
+}
+.freq-tab.active{background:var(--blue2);color:#fff;}
+.freq-tab-content{display:none;}
+.freq-tab-content.active{display:block;}
+
+/* ALUNOS FREQ */
+.aluno-freq-block{background:var(--gray50);border:1px solid var(--gray200);border-radius:10px;padding:16px;margin-bottom:14px;}
+.aluno-freq-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:8px;}
+.pct-bar-wrap{background:var(--gray200);border-radius:6px;height:6px;flex:1;min-width:60px;}
+.pct-bar{height:6px;border-radius:6px;background:var(--blue2);transition:width .4s;}
+
+/* DESTAQUE — SOFT COLORS */
+.dest-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;}
+.dest-field{background:var(--dest-card);border:1.5px solid var(--dest-border);border-radius:10px;padding:14px;}
+.dest-field label{color:var(--dest-label);font-size:0.68rem;font-weight:700;text-transform:uppercase;letter-spacing:1px;}
+.dest-field input{background:#fff;border:1.5px solid var(--dest-border);color:var(--dest-val);border-radius:6px;padding:7px 10px;font-size:1.1rem;font-weight:700;width:100%;margin-top:5px;}
+.dest-field input::placeholder{color:#a5b4fc;}
+.dest-field input:focus{border-color:var(--blue3);background:#f0f4ff;outline:none;}
+
+/* DESTAQUE PREVIEW — SOFT */
+#boletim-preview{
+  background:linear-gradient(135deg,#eef2ff 0%,#e0e7ff 50%,#dbeafe 100%);
+  border-radius:12px;padding:26px;color:#1e1b4b;margin-top:18px;
+  border:1.5px solid #c7d2fe;
+}
+.bol-header{text-align:center;padding-bottom:14px;border-bottom:1px solid rgba(99,102,241,0.25);margin-bottom:18px;}
+.bol-header h3{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:#312e81;}
+.bol-header p{font-size:0.8rem;color:#6366f1;margin-top:3px;}
+.bol-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(110px,1fr));gap:10px;}
+.bol-stat{text-align:center;background:rgba(99,102,241,0.1);border-radius:8px;padding:14px 8px;border:1px solid rgba(99,102,241,0.2);}
+.bol-val{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#4f46e5;line-height:1;}
+.bol-lbl{font-size:0.68rem;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;margin-top:4px;}
+
+/* DESTAQUE CHART */
+#destaque-chart-wrap{margin-top:20px;background:#f8faff;border-radius:12px;padding:20px;border:1.5px solid #c7d2fe;}
+#destaque-chart-wrap h4{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1.5px;color:#4338ca;margin-bottom:14px;}
+
+/* EXPORT */
+.export-btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:14px;}
+
+/* CLASSES */
+.class-block{border:1px solid var(--gray200);border-radius:10px;overflow:hidden;margin-bottom:14px;}
+.class-block-header{
+  background:var(--gray900);padding:13px 18px;
+  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;
+}
+.class-block-header h4{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1.5px;color:#fff;}
+.class-block-body{padding:14px 18px;}
+
+/* HOW TO */
+.how-step{display:flex;gap:14px;padding:14px;background:var(--gray50);border-radius:10px;margin-bottom:10px;border-left:3px solid var(--blue2);}
+.step-num{width:28px;height:28px;border-radius:50%;background:var(--blue2);color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;font-size:0.82rem;flex-shrink:0;}
+.step-text h4{font-size:0.88rem;font-weight:700;margin-bottom:3px;}
+.step-text p{font-size:0.82rem;color:var(--gray600);line-height:1.5;}
+
+/* TOAST */
+.toast{
+  position:fixed;bottom:20px;right:20px;
+  background:var(--gray900);color:#fff;
+  padding:11px 18px;border-radius:8px;font-size:0.85rem;
+  z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,0.25);
+  transform:translateY(60px);opacity:0;transition:all .3s;
+}
+.toast.show{transform:translateY(0);opacity:1;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:36px 20px;color:var(--gray400);}
+.empty-state .ei{font-size:2.2rem;margin-bottom:8px;}
+
+/* EDIT MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:500;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:#fff;border-radius:14px;padding:26px;width:90%;max-width:560px;max-height:90vh;overflow-y:auto;}
+.modal-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1.5px;margin-bottom:18px;color:var(--gray900);border-bottom:2px solid var(--blue2);padding-bottom:8px;}
+
+/* ALUNO ADD ROW */
+.aluno-add-row{display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap;padding:12px;background:var(--gray50);border-radius:8px;margin-bottom:12px;}
+.aluno-add-row .form-group{flex:1;min-width:120px;}
+
+/* ══ ALUNOS PAGE ══ */
+.aluno-card{background:var(--gray50);border:1.5px solid var(--gray200);border-radius:10px;padding:16px;margin-bottom:14px;}
+.aluno-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:8px;}
+.aluno-card-body{}
+.aluno-name{font-weight:700;font-size:0.97rem;color:var(--gray900);}
+.aluno-meta{font-size:0.76rem;color:var(--gray400);margin-top:2px;}
+.aluno-stats{display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;align-items:center;}
+.stat-chip{display:flex;align-items:center;gap:5px;background:var(--gray100);border-radius:20px;padding:4px 10px;font-size:0.78rem;font-weight:700;}
+
+/* pct bar inline */
+.freq-mini{display:flex;align-items:center;gap:8px;margin-top:8px;}
+.freq-mini-bar{flex:1;height:8px;background:var(--gray200);border-radius:6px;overflow:hidden;}
+.freq-mini-fill{height:8px;border-radius:6px;transition:width .5s;}
+
+/* sunday grid */
+.sun-grid{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px;}
+.sun-cell{width:34px;display:flex;flex-direction:column;align-items:center;gap:2px;}
+.sun-dot{width:30px;height:30px;border-radius:50%;background:var(--gray200);display:flex;align-items:center;justify-content:center;font-size:0.65rem;font-weight:700;cursor:pointer;transition:all .15s;border:2px solid transparent;user-select:none;}
+.sun-dot:hover{transform:scale(1.1);}
+.sun-dot.pres{background:var(--green);color:#fff;border-color:#15803d;}
+.sun-dot.falt{background:var(--red);color:#fff;border-color:#b91c1c;}
+.sun-date{font-size:0.55rem;color:var(--gray400);}
+
+/* filters bar */
+.filter-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px;align-items:center;}
+.filter-bar input,.filter-bar select{padding:8px 12px;border:1.5px solid var(--gray300);border-radius:8px;font-size:0.85rem;background:#fff;outline:none;}
+.filter-bar input:focus,.filter-bar select:focus{border-color:var(--blue2);}
+
+/* month accordion */
+.month-acc{margin-bottom:6px;}
+.month-acc-hdr{display:flex;align-items:center;justify-content:space-between;cursor:pointer;padding:6px 8px;border-radius:8px;background:var(--gray50);border:1px solid var(--gray200);font-size:0.78rem;font-weight:700;color:var(--blue2);user-select:none;}
+.month-acc-hdr:hover{background:var(--blue-light);}
+.month-acc-body{padding:8px 4px 4px;display:none;}
+.month-acc-body.open{display:block;}
+
+/* ══ PWA INSTALL BANNER ══ */
+#pwa-banner {
+  position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%) translateY(120px);
+  background: #1e3a5f; color: #fff; border-radius: 14px;
+  padding: 14px 20px; display: flex; align-items: center; gap: 14px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.35); z-index: 8000;
+  max-width: 420px; width: 90%;
+  transition: transform .4s cubic-bezier(.34,1.56,.64,1);
+}
+#pwa-banner.show { transform: translateX(-50%) translateY(0); }
+.pwa-banner-icon { font-size: 2rem; flex-shrink: 0; }
+.pwa-banner-text { flex: 1; }
+.pwa-banner-text strong { display: block; font-size: 0.92rem; margin-bottom: 2px; }
+.pwa-banner-text span { font-size: 0.78rem; color: #93c5fd; }
+.pwa-banner-btns { display: flex; gap: 8px; flex-shrink: 0; }
+.pwa-install-btn {
+  background: #2563eb; color: #fff; border: none; border-radius: 8px;
+  padding: 8px 16px; font-size: 0.84rem; font-weight: 700; cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif; white-space: nowrap;
+}
+.pwa-install-btn:hover { background: #1d4ed8; }
+.pwa-dismiss-btn {
+  background: transparent; color: rgba(255,255,255,0.5); border: 1px solid rgba(255,255,255,0.2);
+  border-radius: 8px; padding: 8px 10px; font-size: 0.8rem; cursor: pointer;
+  font-family: 'Source Sans 3', sans-serif;
+}
+.pwa-dismiss-btn:hover { color: #fff; border-color: rgba(255,255,255,0.5); }
+
+/* ══ OFFLINE BADGE ══ */
+#offline-badge {
+  display: none; position: fixed; top: 10px; left: 50%; transform: translateX(-50%);
+  background: #b91c1c; color: #fff; padding: 5px 16px; border-radius: 20px;
+  font-size: 0.78rem; font-weight: 700; z-index: 9000; box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+#offline-badge.show { display: block; }
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  #sidebar{transform:translateX(-100%);}
+  #sidebar.open{transform:translateX(0);}
+  #main{margin-left:0;}
+  .hamburger{display:flex;}
+  .form-grid{grid-template-columns:1fr;}
+  .content{padding:16px;}
+  .dest-grid{grid-template-columns:1fr 1fr;}
+  .freq-tabs{flex-direction:column;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ LOGIN ══ -->
+<div id="login-screen">
+  <div class="login-box">
+    <div class="login-logo">✝ EBD 2026</div>
+    <div class="login-sub">Escola Bíblica Dominical</div>
+    <div class="login-form">
+      <div class="form-group">
+        <label>Login</label>
+        <input type="text" id="login-user" placeholder="Digite seu login" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label>Senha</label>
+        <input type="password" id="login-pass" placeholder="Digite sua senha" autocomplete="current-password" onkeydown="if(event.key==='Enter')doLogin()">
+      </div>
+      <button class="login-btn" onclick="doLogin()">🔐 Entrar</button>
+      <div class="login-err" id="login-err">Login ou senha incorretos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ APP ══ -->
+<div id="app-wrapper" style="display:none;width:100%;min-height:100vh;display:none;">
+
+<div id="overlay" onclick="closeSidebar()"></div>
+<div class="toast" id="toast"></div>
+
+<!-- EDIT MODAL -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Editar</div>
+    <div id="modal-body"></div>
+    <div style="display:flex;gap:10px;margin-top:18px;">
+      <button class="btn btn-blue" onclick="saveModal()">💾 Salvar</button>
+      <button class="btn btn-gray" onclick="closeModal()">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <h1>✝ EBD 2026</h1>
+    <p>Frequência Geral</p>
+  </div>
+  <div class="sb-nav">
+    <div class="sb-section">Início</div>
+    <div class="nav-item active" data-page="como-usar" onclick="showPage('como-usar',this)"><span class="nav-icon">📖</span>Como Usar</div>
+    <div class="sb-section">Configurações</div>
+    <div class="nav-item" data-page="igreja" onclick="showPage('igreja',this)"><span class="nav-icon">⛪</span>Cadastro de Igreja</div>
+    <div class="nav-item" data-page="coordenador" onclick="showPage('coordenador',this)"><span class="nav-icon">👤</span>Coordenador</div>
+    <div class="nav-item" data-page="secretaria" onclick="showPage('secretaria',this)"><span class="nav-icon">📋</span>Secretaria</div>
+    <div class="sb-section">EBD</div>
+    <div class="nav-item" data-page="professores" onclick="showPage('professores',this)"><span class="nav-icon">🎓</span>Cadastro de Professores</div>
+    <div class="nav-item" data-page="classes" onclick="showPage('classes',this)"><span class="nav-icon">🏫</span>Classes de Alunos</div>
+    <div class="nav-item" data-page="alunos" onclick="showPage('alunos',this)"><span class="nav-icon">👨‍🎓</span>Cadastro de Alunos</div>
+    <div class="nav-item" data-page="frequencia" onclick="showPage('frequencia',this)"><span class="nav-icon">✅</span>Frequência</div>
+    <div class="nav-item" data-page="destaque" onclick="showPage('destaque',this)"><span class="nav-icon">🌟</span>Destaque do Dia</div>
+    <div class="sb-section">Relatório</div>
+    <div class="nav-item" data-page="exportar" onclick="showPage('exportar',this)"><span class="nav-icon">📤</span>Exportar</div>
+    <div style="padding:20px;margin-top:auto;">
+      <button class="btn btn-outline btn-sm" style="width:100%;color:rgba(255,255,255,0.5);border-color:rgba(255,255,255,0.15);" onclick="doLogout()">🚪 Sair</button>
+    </div>
+  </div>
+</nav>
+
+<!-- MAIN -->
+<div id="main">
+  <div class="topbar">
+    <div style="display:flex;align-items:center;gap:12px;">
+      <div class="hamburger" onclick="toggleSidebar()"><span></span><span></span><span></span></div>
+      <h2 id="page-title">COMO USAR</h2>
+    </div>
+    <span style="font-size:0.75rem;color:var(--gray400);font-weight:700;">AD • 2026</span>
+  </div>
+
+  <div class="content">
+
+    <!-- ══ COMO USAR ══ -->
+    <div class="page active" id="page-como-usar">
+      <div class="card">
+        <div class="card-title">📖 Bem-vindo ao EBD Frequência Geral</div>
+        <p style="font-size:0.88rem;color:var(--gray600);margin-bottom:18px;">Sistema completo para controle da Escola Bíblica Dominical — Assembleia de Deus, Congregação Jardim Imperial.</p>
+        <div class="how-step"><div class="step-num">1</div><div class="step-text"><h4>Verifique o Cadastro da Igreja</h4><p>As informações já estão pré-preenchidas. Confirme ou atualize em "Cadastro de Igreja".</p></div></div>
+        <div class="how-step"><div class="step-num">2</div><div class="step-text"><h4>Registre Coordenador e Secretaria</h4><p>Informe os responsáveis pela EBD nos respectivos cadastros.</p></div></div>
+        <div class="how-step"><div class="step-num">3</div><div class="step-text"><h4>Cadastre os Professores</h4><p>Até 20 professores. Após cadastrar, edite ou remova diretamente na lista.</p></div></div>
+        <div class="how-step"><div class="step-num">4</div><div class="step-text"><h4>Cadastre as Classes de Alunos</h4><p>Crie as turmas com nome, nível, faixa etária, professor responsável, professor auxiliar e sala.</p></div></div>
+        <div class="how-step"><div class="step-num">5</div><div class="step-text"><h4>Marque a Frequência</h4><p>Na aba Professores: ⚪→🟢→🔴. Na aba Alunos: cadastre e marque presença/falta de cada aluno.</p></div></div>
+        <div class="how-step"><div class="step-num">6</div><div class="step-text"><h4>Preencha o Destaque do Dia</h4><p>Registre os dados do boletim dominical e visualize o gráfico automático.</p></div></div>
+        <div class="how-step"><div class="step-num">7</div><div class="step-text"><h4>Exporte e Compartilhe</h4><p>Gere PNG do boletim com lista de alunos, compartilhe no WhatsApp ou exporte PDF completo.</p></div></div>
+      </div>
+    </div>
+
+    <!-- ══ IGREJA ══ -->
+    <div class="page" id="page-igreja">
+      <div class="card">
+        <div class="card-title">⛪ Cadastro de Igreja</div>
+        <div class="form-grid">
+          <div class="form-group full"><label>Nome da Igreja</label><input type="text" id="ig-nome" placeholder="Nome da Igreja"></div>
+          <div class="form-group"><label>Congregação</label><input type="text" id="ig-denom" placeholder="Nome da congregação"></div>
+          <div class="form-group"><label>Cidade / Estado</label><input type="text" id="ig-cidade" placeholder="Cidade / UF"></div>
+          <div class="form-group full"><label>Endereço</label><input type="text" id="ig-end" placeholder="Endereço completo"></div>
+          <div class="form-group"><label>Pastor</label><input type="text" id="ig-pastor" placeholder="Nome do Pastor"></div>
+          <div class="form-group"><label>Telefone</label><input type="tel" id="ig-tel" placeholder="(00) 00000-0000"></div>
+        </div>
+        <div style="margin-top:16px;"><button class="btn btn-blue" onclick="saveChurch()">💾 Salvar Igreja</button></div>
+      </div>
+    </div>
+
+    <!-- ══ COORDENADOR ══ -->
+    <div class="page" id="page-coordenador">
+      <div class="card">
+        <div class="card-title">👤 Coordenador da EBD</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome Completo</label><input type="text" id="coord-nome" placeholder="Nome do Coordenador"></div>
+          <div class="form-group"><label>Telefone</label><input type="tel" id="coord-tel" placeholder="(00) 00000-0000"></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="coord-email" placeholder="email@exemplo.com"></div>
+          <div class="form-group"><label>Desde</label><input type="text" id="coord-desde" placeholder="Ex: Janeiro 2024"></div>
+        </div>
+        <div style="margin-top:16px;"><button class="btn btn-blue" onclick="saveCoord()">💾 Salvar Coordenador</button></div>
+      </div>
+    </div>
+
+    <!-- ══ SECRETARIA ══ -->
+    <div class="page" id="page-secretaria">
+      <div class="card">
+        <div class="card-title">📋 Secretaria da EBD</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome Completo</label><input type="text" id="sec-nome" placeholder="Nome da Secretária"></div>
+          <div class="form-group"><label>Telefone</label><input type="tel" id="sec-tel" placeholder="(00) 00000-0000"></div>
+          <div class="form-group"><label>E-mail</label><input type="email" id="sec-email" placeholder="email@exemplo.com"></div>
+          <div class="form-group"><label>Função</label><input type="text" id="sec-funcao" placeholder="Ex: Secretária Geral"></div>
+        </div>
+        <div style="margin-top:16px;"><button class="btn btn-blue" onclick="saveSec()">💾 Salvar Secretaria</button></div>
+      </div>
+    </div>
+
+    <!-- ══ PROFESSORES ══ -->
+    <div class="page" id="page-professores">
+      <div class="card">
+        <div class="card-title">🎓 Cadastrar Professor</div>
+        <div class="counter-bar"><span class="counter-pill" id="prof-count">0 / 20 professores</span></div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome Completo</label><input type="text" id="pf-nome" placeholder="Nome do Professor(a)"></div>
+          <div class="form-group"><label>Idade</label><input type="number" id="pf-idade" placeholder="Ex: 35" min="10" max="99"></div>
+          <div class="form-group"><label>Data de Nascimento</label><input type="text" id="pf-nasc" placeholder="DD/MM/AAAA" maxlength="10"></div>
+          <div class="form-group"><label>Sexo</label>
+            <select id="pf-sexo"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select>
+          </div>
+          <div class="form-group"><label>Telefone</label><input type="tel" id="pf-tel" placeholder="(00) 00000-0000"></div>
+          <div class="form-group"><label>Turma / Classe</label><input type="text" id="pf-turma" placeholder="Ex: Juvenis"></div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn btn-blue" onclick="addProfessor()">➕ Cadastrar Professor</button></div>
+      </div>
+      <div class="card" id="prof-list-card">
+        <div class="card-title">📋 Professores Cadastrados</div>
+        <div id="prof-list-content"></div>
+      </div>
+    </div>
+
+    <!-- ══ CLASSES ══ -->
+    <div class="page" id="page-classes">
+      <div class="card">
+        <div class="card-title">🏫 Nova Classe</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome da Classe</label><input type="text" id="cl-nome" placeholder="Ex: Turma Juvenil A"></div>
+          <div class="form-group"><label>Nível</label>
+            <select id="cl-nivel">
+              <option value="mat">Maternal (0–3 anos)</option>
+              <option value="inf">Infantil (4–7 anos)</option>
+              <option value="juv">Juvenil (8–12 anos)</option>
+              <option value="jov">Jovens (13–17 anos)</option>
+              <option value="adu">Adultos (18–59 anos)</option>
+              <option value="ter">Terceira Idade (60+)</option>
+              <option value="mix">Misto</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Faixa Etária</label><input type="text" id="cl-faixa" placeholder="Ex: 12 a 17 anos"></div>
+          <div class="form-group"><label>Professor Responsável</label><select id="cl-prof-sel"><option value="">-- Nenhum --</option></select></div>
+          <div class="form-group"><label>Professor Auxiliar</label><select id="cl-aux-sel"><option value="">-- Nenhum --</option></select></div>
+          <div class="form-group"><label>Sala / Local</label><input type="text" id="cl-sala" placeholder="Ex: Sala 3"></div>
+          <div class="form-group"><label>Horário</label><input type="text" id="cl-horario" placeholder="Ex: 9h00 às 10h00"></div>
+        </div>
+        <div style="margin-top:14px;"><button class="btn btn-blue" onclick="addClass()">➕ Criar Classe</button></div>
+      </div>
+      <div class="card">
+        <div class="card-title">📋 Classes Cadastradas <span class="badge badge-blue" id="classes-count">0</span></div>
+        <div id="classes-list"></div>
+      </div>
+    </div>
+
+    <!-- ══ FREQUÊNCIA ══ -->
+    <div class="page" id="page-frequencia">
+      <div class="card">
+        <div class="card-title">✅ Frequência 2026</div>
+        <!-- Tabs -->
+        <div class="freq-tabs">
+          <button class="freq-tab active" onclick="switchFreqTab('professores',this)">🎓 Professores</button>
+          <button class="freq-tab" onclick="switchFreqTab('alunos',this)">👨‍🎓 Alunos por Classe</button>
+        </div>
+        <!-- Tab: Professores -->
+        <div class="freq-tab-content active" id="freq-tab-professores">
+          <p style="font-size:0.83rem;color:var(--gray600);margin-bottom:16px;">⚪ → 🟢 Presente → 🔴 Falta → ⚪ &nbsp;|&nbsp; Use <strong>Editar</strong> para corrigir qualquer registro.</p>
+          <div id="freq-list"></div>
+        </div>
+        <!-- Tab: Alunos -->
+        <div class="freq-tab-content" id="freq-tab-alunos">
+          <div id="freq-alunos-content"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══ DESTAQUE ══ -->
+    <div class="page" id="page-destaque">
+      <div class="card">
+        <div class="card-title">🌟 Destaque do Dia</div>
+        <div class="form-group" style="margin-bottom:16px;max-width:200px;">
+          <label>Data (DD/MM/AAAA)</label>
+          <input type="text" id="dest-data" placeholder="Ex: 04/01/2026" maxlength="10">
+        </div>
+        <div class="dest-grid">
+          <div class="dest-field"><label>Matriculados</label><input type="number" id="dest-matr" placeholder="0" min="0" oninput="updateBoletim()"></div>
+          <div class="dest-field"><label>Presentes</label><input type="number" id="dest-pres" placeholder="0" min="0" oninput="updateBoletim()"></div>
+          <div class="dest-field"><label>Ausentes</label><input type="number" id="dest-aus" placeholder="0" min="0" oninput="updateBoletim()"></div>
+          <div class="dest-field"><label>Assistência</label><input type="number" id="dest-assist" placeholder="0" min="0" oninput="updateBoletim()"></div>
+          <div class="dest-field"><label>Bíblias</label><input type="number" id="dest-bib" placeholder="0" min="0" oninput="updateBoletim()"></div>
+          <div class="dest-field"><label>Ofertas (R$)</label><input type="number" id="dest-oferta" placeholder="0,00" min="0" step="0.01" oninput="updateBoletim()"></div>
+        </div>
+        <div style="margin-top:16px;"><button class="btn btn-blue" onclick="saveDestaque()">💾 Salvar Destaque</button></div>
+      </div>
+      <!-- Boletim preview -->
+      <div id="boletim-preview">
+        <div class="bol-header">
+          <h3 id="prev-igname">ASSEMBLEIA DE DEUS</h3>
+          <p id="prev-date">EBD — Domingo</p>
+        </div>
+        <div class="bol-grid">
+          <div class="bol-stat"><div class="bol-val" id="prev-matr">0</div><div class="bol-lbl">Matriculados</div></div>
+          <div class="bol-stat"><div class="bol-val" id="prev-pres">0</div><div class="bol-lbl">Presentes</div></div>
+          <div class="bol-stat"><div class="bol-val" id="prev-aus">0</div><div class="bol-lbl">Ausentes</div></div>
+          <div class="bol-stat"><div class="bol-val" id="prev-assist">0</div><div class="bol-lbl">Assistência</div></div>
+          <div class="bol-stat"><div class="bol-val" id="prev-bib">0</div><div class="bol-lbl">Bíblias</div></div>
+          <div class="bol-stat"><div class="bol-val" id="prev-oferta">R$ 0,00</div><div class="bol-lbl">Ofertas</div></div>
+        </div>
+      </div>
+      <!-- Chart -->
+      <div id="destaque-chart-wrap">
+        <h4>📊 Gráfico do Destaque</h4>
+        <canvas id="destaque-chart" height="120"></canvas>
+      </div>
+    </div>
+
+    <!-- ══ ALUNOS ══ -->
+    <div class="page" id="page-alunos">
+
+      <!-- Cadastro rápido -->
+      <div class="card">
+        <div class="card-title">👨‍🎓 Cadastrar Novo Aluno</div>
+        <div class="form-grid">
+          <div class="form-group"><label>Nome Completo *</label><input type="text" id="al-new-nome" placeholder="Nome do aluno"></div>
+          <div class="form-group"><label>Classe *</label><select id="al-new-class"><option value="">-- Selecione a classe --</option></select></div>
+          <div class="form-group"><label>Data de Nascimento</label><input type="text" id="al-new-nasc" placeholder="DD/MM/AAAA" maxlength="10"></div>
+          <div class="form-group"><label>Sexo</label>
+            <select id="al-new-sexo"><option value="">Selecione</option><option value="M">Masculino</option><option value="F">Feminino</option></select>
+          </div>
+          <div class="form-group"><label>Telefone / Responsável</label><input type="tel" id="al-new-tel" placeholder="(00) 00000-0000"></div>
+          <div class="form-group"><label>Endereço</label><input type="text" id="al-new-end" placeholder="Rua, número"></div>
+          <div class="form-group full"><label>Observações</label><input type="text" id="al-new-obs" placeholder="Alergias, necessidades especiais, etc."></div>
+        </div>
+        <div style="margin-top:14px;">
+          <button class="btn btn-blue" onclick="addAlunoPage()">➕ Cadastrar Aluno</button>
+        </div>
+      </div>
+
+      <!-- Stats summary -->
+      <div class="card" id="alunos-summary-card" style="display:none;">
+        <div class="card-title">📊 Resumo Geral</div>
+        <div id="alunos-summary"></div>
+      </div>
+
+      <!-- Lista com filtros e frequência -->
+      <div class="card">
+        <div class="card-title">📋 Alunos Cadastrados <span class="badge badge-blue" id="alunos-total-badge">0</span></div>
+        <div class="filter-bar">
+          <input type="text" id="al-filter-nome" placeholder="🔍 Buscar por nome..." oninput="renderAlunosPage()" style="flex:1;min-width:160px;">
+          <select id="al-filter-class" onchange="renderAlunosPage()" style="min-width:150px;">
+            <option value="">Todas as classes</option>
+          </select>
+          <select id="al-filter-sexo" onchange="renderAlunosPage()">
+            <option value="">Todos</option>
+            <option value="M">Masculino</option>
+            <option value="F">Feminino</option>
+          </select>
+        </div>
+        <div id="alunos-list-page"></div>
+      </div>
+    </div>
+
+    <!-- ══ EXPORTAR ══ -->
+    <div class="page" id="page-exportar">
+      <div class="card">
+        <div class="card-title">📤 Exportar Boletim do Dia</div>
+        <p style="font-size:0.84rem;color:var(--gray600);margin-bottom:4px;">Compartilhe o destaque atual + lista completa de alunos com frequência do dia.</p>
+        <div class="export-btns">
+          <button class="btn btn-dark" onclick="exportPNG()">🖼️ Exportar PNG</button>
+          <button class="btn btn-green" onclick="shareWhatsApp()">💬 WhatsApp</button>
+          <button class="btn btn-outline" onclick="shareEmail()">📧 E-mail</button>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-title">📑 Relatório Geral do Semestre (PDF)</div>
+        <p style="font-size:0.84rem;color:var(--gray600);margin-bottom:14px;">Gera um PDF completo com dados da igreja, professores, <strong>lista completa de alunos com frequência</strong> (gerada na data da aula), classes e destaque do dia.</p>
+        <button class="btn btn-blue" onclick="exportPDF()">📄 Gerar PDF Completo</button>
+      </div>
+      <div class="card">
+        <div class="card-title">📊 Resumo de Frequência</div>
+        <div id="export-freq-summary"></div>
+      </div>
+    </div>
+
+  </div><!-- end content -->
+</div><!-- end main -->
+
+</div><!-- end app-wrapper -->
+
+<script>
+// ══════════════════════════════════
+// LOGIN
+// ══════════════════════════════════
+function doLogin() {
+  const u = document.getElementById('login-user').value.trim();
+  const p = document.getElementById('login-pass').value;
+  if (u === 'ebd' && p === 'ebd123') {
+    document.getElementById('login-screen').style.display = 'none';
+    const app = document.getElementById('app-wrapper');
+    app.style.display = 'flex';
+    app.style.width = '100%';
+    app.style.minHeight = '100vh';
+    load();
+    if (!state.classes) state.classes = [];
+    if (!state.students) state.students = {};
+    if (!state.studFreq) state.studFreq = {};
+    loadChurchFields();
+    const pfNascInit = document.getElementById('pf-nasc');
+    if (pfNascInit) applyDateMask(pfNascInit);
+    populateAlunosClassFilter();
+  } else {
+    document.getElementById('login-err').style.display = 'block';
+    document.getElementById('login-pass').value = '';
+  }
+}
+function doLogout() {
+  document.getElementById('app-wrapper').style.display = 'none';
+  document.getElementById('login-screen').style.display = 'flex';
+  document.getElementById('login-user').value = '';
+  document.getElementById('login-pass').value = '';
+  document.getElementById('login-err').style.display = 'none';
+}
+
+// ══════════════════════════════════
+// STATE
+// ══════════════════════════════════
+const state = {
+  church: {
+    nome: 'Assembleia de Deus',
+    denom: 'Congregação Jardim Imperial',
+    cidade: 'Marituba / PA',
+    end: 'Rua Parque das Palmeiras, Quadra 11, Casa 44',
+    pastor: '',
+    tel: ''
+  },
+  coord: {},
+  sec: {},
+  professors: [],
+  classes: [],
+  freq: {},
+  destaque: {},
+  students: {}, // classId → [{id,nome,sexo}]
+  studFreq: {}  // studentId → { dateKey: 1|2 }
+};
+
+// ══════════════════════════════════
+// SUNDAYS 2026
+// ══════════════════════════════════
+const MONTHS = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+const MONTHS_SHORT = ['Jan','Fev','Mar','Abr','Mai','Jun','Jul','Ago','Set','Out','Nov','Dez'];
+
+function getSundays2026() {
+  const r = {};
+  for (let m = 0; m < 12; m++) {
+    r[m] = [];
+    let d = new Date(2026, m, 1);
+    while (d.getDay() !== 0) d.setDate(d.getDate()+1);
+    while (d.getMonth() === m) { r[m].push(new Date(d)); d.setDate(d.getDate()+7); }
+  }
+  return r;
+}
+const SUNDAYS = getSundays2026();
+
+function fmtDate(d) {
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0');
+}
+function dateKey(d) {
+  const y = d.getFullYear(), m = String(d.getMonth()+1).padStart(2,'0'), day = String(d.getDate()).padStart(2,'0');
+  return `${y}-${m}-${day}`;
+}
+function todayKey() { return dateKey(new Date()); }
+
+// ══════════════════════════════════
+// STORAGE
+// ══════════════════════════════════
+function save() {
+  try { localStorage.setItem('ebd2026v3', JSON.stringify(state)); } catch(e) {}
+}
+function load() {
+  try {
+    const raw = localStorage.getItem('ebd2026v3') || localStorage.getItem('ebd2026v2');
+    if (raw) {
+      const p = JSON.parse(raw);
+      if (p.church) Object.assign(state.church, p.church);
+      if (p.coord) state.coord = p.coord;
+      if (p.sec) state.sec = p.sec;
+      if (p.professors) state.professors = p.professors;
+      if (p.classes) state.classes = p.classes;
+      if (p.freq) state.freq = p.freq;
+      if (p.destaque) state.destaque = p.destaque;
+      if (p.students) state.students = p.students;
+      if (p.studFreq) state.studFreq = p.studFreq;
+    }
+  } catch(e) {}
+}
+
+// ══════════════════════════════════
+// NAV
+// ══════════════════════════════════
+const PAGE_TITLES = {
+  'como-usar':'COMO USAR','igreja':'CADASTRO DE IGREJA','coordenador':'COORDENADOR',
+  'secretaria':'SECRETARIA','professores':'PROFESSORES','classes':'CLASSES DE ALUNOS',
+  'alunos':'CADASTRO DE ALUNOS',
+  'frequencia':'FREQUÊNCIA 2026','destaque':'DESTAQUE DO DIA','exportar':'EXPORTAR'
+};
+function showPage(id, navEl) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('page-title').textContent = PAGE_TITLES[id] || id.toUpperCase();
+  if (navEl) navEl.classList.add('active');
+  closeSidebar();
+  if (id === 'alunos') { populateAlunosClassFilter(); renderAlunosPage(); }
+  if (id === 'professores') { renderProfList(); const pfNasc = document.getElementById('pf-nasc'); if(pfNasc) applyDateMask(pfNasc); }
+  if (id === 'classes') { populateClassProfSelect(); renderClassList(); populateAlunosClassFilter(); }
+  if (id === 'frequencia') { renderFreqAll(); renderFreqAlunos(); }
+  if (id === 'destaque') { loadDestaqueFields(); updateBoletim(); initDateMasks(); }
+  if (id === 'exportar') { loadDestaqueFields(); updateBoletim(); renderFreqSummary(); }
+  if (id === 'igreja') loadChurchFields();
+  if (id === 'coordenador') loadCoordFields();
+  if (id === 'secretaria') loadSecFields();
+}
+function toggleSidebar() {
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('overlay').classList.toggle('open');
+}
+function closeSidebar() {
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('overlay').classList.remove('open');
+}
+
+// ══════════════════════════════════
+// CHURCH
+// ══════════════════════════════════
+function loadChurchFields() {
+  const c = state.church;
+  document.getElementById('ig-nome').value = c.nome||'';
+  document.getElementById('ig-denom').value = c.denom||'';
+  document.getElementById('ig-cidade').value = c.cidade||'';
+  document.getElementById('ig-end').value = c.end||'';
+  document.getElementById('ig-pastor').value = c.pastor||'';
+  document.getElementById('ig-tel').value = c.tel||'';
+}
+function saveChurch() {
+  state.church = {
+    nome: document.getElementById('ig-nome').value,
+    denom: document.getElementById('ig-denom').value,
+    cidade: document.getElementById('ig-cidade').value,
+    end: document.getElementById('ig-end').value,
+    pastor: document.getElementById('ig-pastor').value,
+    tel: document.getElementById('ig-tel').value,
+  };
+  save(); showToast('Igreja salva! ⛪');
+}
+function loadCoordFields() {
+  ['nome','tel','email','desde'].forEach(f => document.getElementById('coord-'+f).value = state.coord[f]||'');
+}
+function saveCoord() {
+  state.coord = { nome: document.getElementById('coord-nome').value, tel: document.getElementById('coord-tel').value, email: document.getElementById('coord-email').value, desde: document.getElementById('coord-desde').value };
+  save(); showToast('Coordenador salvo! 👤');
+}
+function loadSecFields() {
+  ['nome','tel','email','funcao'].forEach(f => document.getElementById('sec-'+f).value = state.sec[f]||'');
+}
+function saveSec() {
+  state.sec = { nome: document.getElementById('sec-nome').value, tel: document.getElementById('sec-tel').value, email: document.getElementById('sec-email').value, funcao: document.getElementById('sec-funcao').value };
+  save(); showToast('Secretaria salva! 📋');
+}
+
+// ══════════════════════════════════
+// PROFESSORS
+// ══════════════════════════════════
+function addProfessor() {
+  if (state.professors.length >= 20) { showToast('Limite de 20 professores atingido!'); return; }
+  const nome = document.getElementById('pf-nome').value.trim();
+  if (!nome) { showToast('Informe o nome do professor!'); return; }
+  const prof = {
+    id: Date.now().toString(), nome,
+    idade: document.getElementById('pf-idade').value,
+    nasc: document.getElementById('pf-nasc').value,
+    sexo: document.getElementById('pf-sexo').value,
+    tel: document.getElementById('pf-tel').value,
+    turma: document.getElementById('pf-turma').value,
+  };
+  state.professors.push(prof);
+  save();
+  ['pf-nome','pf-idade','pf-nasc','pf-tel','pf-turma'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('pf-sexo').value = '';
+  renderProfList();
+  showToast('Professor cadastrado! 🎓');
+}
+function deleteProfessor(id) {
+  if (!confirm('Remover este professor?')) return;
+  state.professors = state.professors.filter(p => p.id !== id);
+  delete state.freq[id];
+  save(); renderProfList();
+  showToast('Professor removido.');
+}
+let editingProfId = null;
+function openEditProf(id) {
+  const p = state.professors.find(x => x.id === id);
+  if (!p) return;
+  editingProfId = id;
+  document.getElementById('modal-title').textContent = 'Editar Professor';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      <div class="form-group"><label>Nome</label><input type="text" id="ep-nome" value="${p.nome||''}"></div>
+      <div class="form-group"><label>Idade</label><input type="number" id="ep-idade" value="${p.idade||''}"></div>
+      <div class="form-group"><label>Nascimento (DD/MM/AAAA)</label><input type="text" id="ep-nasc" value="${p.nasc||''}" placeholder="DD/MM/AAAA" maxlength="10"></div>
+      <div class="form-group"><label>Sexo</label><select id="ep-sexo"><option value="">-</option><option value="M" ${p.sexo==='M'?'selected':''}>Masculino</option><option value="F" ${p.sexo==='F'?'selected':''}>Feminino</option></select></div>
+      <div class="form-group"><label>Telefone</label><input type="tel" id="ep-tel" value="${p.tel||''}"></div>
+      <div class="form-group"><label>Turma</label><input type="text" id="ep-turma" value="${p.turma||''}"></div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  const epNasc = document.getElementById('ep-nasc');
+  if (epNasc) applyDateMask(epNasc);
+  window._modalSave = () => {
+    p.nome = document.getElementById('ep-nome').value;
+    p.idade = document.getElementById('ep-idade').value;
+    p.nasc = document.getElementById('ep-nasc').value;
+    p.sexo = document.getElementById('ep-sexo').value;
+    p.tel = document.getElementById('ep-tel').value;
+    p.turma = document.getElementById('ep-turma').value;
+    save(); renderProfList(); closeModal(); showToast('Professor atualizado!');
+  };
+}
+function renderProfList() {
+  document.getElementById('prof-count').textContent = state.professors.length + ' / 20 professores';
+  const el = document.getElementById('prof-list-content');
+  if (!state.professors.length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">🎓</div><p>Nenhum professor cadastrado.</p></div>'; return;
+  }
+  el.innerHTML = `<div style="overflow-x:auto;"><table class="data-table">
+    <thead><tr><th>#</th><th>Nome</th><th>Idade</th><th>Nascimento</th><th>Sexo</th><th>Telefone</th><th>Turma</th><th>Ações</th></tr></thead>
+    <tbody>${state.professors.map((p,i) => `<tr>
+      <td>${i+1}</td><td><strong>${p.nome}</strong></td>
+      <td>${p.idade||'—'}</td><td>${p.nasc||'—'}</td>
+      <td>${p.sexo ? `<span class="badge badge-${p.sexo.toLowerCase()}">${p.sexo==='F'?'Fem':'Masc'}</span>` : '—'}</td>
+      <td>${p.tel||'—'}</td><td>${p.turma||'—'}</td>
+      <td style="display:flex;gap:6px;flex-wrap:wrap;">
+        <button class="btn btn-outline btn-sm" onclick="openEditProf('${p.id}')">✏️ Editar</button>
+        <button class="btn btn-red btn-sm" onclick="deleteProfessor('${p.id}')">✕</button>
+      </td>
+    </tr>`).join('')}</tbody>
+  </table></div>`;
+}
+
+// ══════════════════════════════════
+// CLASSES — with auxiliary teacher
+// ══════════════════════════════════
+const NIVEL_LABELS = {mat:'Maternal',inf:'Infantil',juv:'Juvenil',jov:'Jovens',adu:'Adultos',ter:'Terceira Idade',mix:'Misto'};
+
+function populateClassProfSelect() {
+  const opts = '<option value="">-- Nenhum --</option>' +
+    state.professors.map(p => `<option value="${p.id}">${p.nome}</option>`).join('');
+  const sel = document.getElementById('cl-prof-sel');
+  const aux = document.getElementById('cl-aux-sel');
+  if (sel) sel.innerHTML = opts;
+  if (aux) aux.innerHTML = opts;
+}
+function addClass() {
+  const nome = document.getElementById('cl-nome').value.trim();
+  if (!nome) { showToast('Informe o nome da classe!'); return; }
+  state.classes.push({
+    id: Date.now().toString(), nome,
+    nivel: document.getElementById('cl-nivel').value,
+    faixa: document.getElementById('cl-faixa').value,
+    profId: document.getElementById('cl-prof-sel').value,
+    auxId: document.getElementById('cl-aux-sel').value,
+    sala: document.getElementById('cl-sala').value,
+    horario: document.getElementById('cl-horario').value,
+  });
+  save();
+  ['cl-nome','cl-faixa','cl-sala','cl-horario'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('cl-nivel').value = 'mat';
+  document.getElementById('cl-prof-sel').value = '';
+  document.getElementById('cl-aux-sel').value = '';
+  renderClassList();
+  populateAlunosClassFilter();
+  showToast('Classe criada! 🏫');
+}
+function deleteClass(id) {
+  if (!confirm('Remover esta classe?')) return;
+  state.classes = state.classes.filter(c => c.id !== id);
+  save(); renderClassList(); showToast('Classe removida.');
+}
+function openEditClass(id) {
+  const cl = state.classes.find(x => x.id === id);
+  if (!cl) return;
+  const profOpts = state.professors.map(p =>
+    `<option value="${p.id}" ${cl.profId===p.id?'selected':''}>${p.nome}</option>`).join('');
+  const auxOpts = state.professors.map(p =>
+    `<option value="${p.id}" ${cl.auxId===p.id?'selected':''}>${p.nome}</option>`).join('');
+  document.getElementById('modal-title').textContent = 'Editar Classe';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nome</label><input id="ecl-nome" value="${cl.nome||''}"></div>
+      <div class="form-group"><label>Nível</label><select id="ecl-nivel">
+        ${Object.entries(NIVEL_LABELS).map(([k,v])=>`<option value="${k}" ${cl.nivel===k?'selected':''}>${v}</option>`).join('')}
+      </select></div>
+      <div class="form-group"><label>Faixa Etária</label><input id="ecl-faixa" value="${cl.faixa||''}"></div>
+      <div class="form-group"><label>Professor Responsável</label><select id="ecl-prof"><option value="">-- Nenhum --</option>${profOpts}</select></div>
+      <div class="form-group"><label>Professor Auxiliar</label><select id="ecl-aux"><option value="">-- Nenhum --</option>${auxOpts}</select></div>
+      <div class="form-group"><label>Sala</label><input id="ecl-sala" value="${cl.sala||''}"></div>
+      <div class="form-group"><label>Horário</label><input id="ecl-horario" value="${cl.horario||''}"></div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  window._modalSave = () => {
+    cl.nome = document.getElementById('ecl-nome').value;
+    cl.nivel = document.getElementById('ecl-nivel').value;
+    cl.faixa = document.getElementById('ecl-faixa').value;
+    cl.profId = document.getElementById('ecl-prof').value;
+    cl.auxId = document.getElementById('ecl-aux').value;
+    cl.sala = document.getElementById('ecl-sala').value;
+    cl.horario = document.getElementById('ecl-horario').value;
+    save(); renderClassList(); closeModal(); showToast('Classe atualizada!');
+  };
+}
+function renderClassList() {
+  document.getElementById('classes-count').textContent = state.classes.length;
+  const el = document.getElementById('classes-list');
+  if (!state.classes.length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">🏫</div><p>Nenhuma classe cadastrada.</p></div>'; return;
+  }
+  el.innerHTML = state.classes.map(cl => {
+    const prof = state.professors.find(p => p.id === cl.profId);
+    const aux = state.professors.find(p => p.id === cl.auxId);
+    const students = state.students[cl.id] || [];
+    return `<div class="class-block">
+      <div class="class-block-header">
+        <div>
+          <h4>🏫 ${cl.nome}</h4>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:6px;">
+            <span class="badge badge-blue">${NIVEL_LABELS[cl.nivel]||cl.nivel}</span>
+            ${cl.faixa ? `<span class="badge badge-gray">🎂 ${cl.faixa}</span>` : ''}
+            ${prof ? `<span class="badge badge-gray">🎓 ${prof.nome}</span>` : ''}
+            ${aux ? `<span class="badge badge-yellow">🧑‍🏫 Aux: ${aux.nome}</span>` : ''}
+            ${cl.sala ? `<span class="badge badge-gray">📍 ${cl.sala}</span>` : ''}
+            ${cl.horario ? `<span class="badge badge-gray">⏰ ${cl.horario}</span>` : ''}
+            <span class="badge badge-green">👨‍🎓 ${students.length} alunos</span>
+          </div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="openEditClass('${cl.id}')">✏️ Editar</button>
+          <button class="btn btn-red btn-sm" onclick="deleteClass('${cl.id}')">🗑 Excluir</button>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ══════════════════════════════════
+// FREQUÊNCIA — PROFESSORES
+// ══════════════════════════════════
+let freqEditMode = {};
+
+function renderFreqAll() {
+  const el = document.getElementById('freq-list');
+  if (!state.professors.length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">🎓</div><p>Cadastre professores primeiro.</p></div>'; return;
+  }
+  el.innerHTML = state.professors.map(p => renderFreqBlock(p)).join('');
+}
+
+function renderFreqBlock(p) {
+  if (!state.freq[p.id]) state.freq[p.id] = {};
+  const editing = freqEditMode[p.id] || false;
+  let total=0, pres=0, falt=0;
+  for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => {
+    const v = state.freq[p.id][dateKey(s)]||0;
+    if (v>0) { total++; if(v===1) pres++; else falt++; }
+  });
+  const pct = total > 0 ? Math.round(pres/total*100) : 0;
+  let monthsHtml = '';
+  for (let m=0;m<12;m++) {
+    monthsHtml += `<div class="month-row"><div class="month-label">${MONTHS[m]}</div><div class="dots-row">`;
+    SUNDAYS[m].forEach(sun => {
+      const key = dateKey(sun);
+      const val = state.freq[p.id][key] || 0;
+      const cls = val===1?'presente':val===2?'falta':'';
+      const lbl = val===1?'P':val===2?'F':'';
+      const clickable = editing ? `onclick="toggleDot('${p.id}','${key}',this)"` : '';
+      const cursor = editing ? 'cursor:pointer;' : 'cursor:default;opacity:0.85;';
+      monthsHtml += `<div class="dot-wrap"><div class="dot ${cls}" ${clickable} style="${cursor}" title="${fmtDate(sun)}">${lbl}</div><span class="dot-date">${fmtDate(sun)}</span></div>`;
+    });
+    monthsHtml += '</div></div>';
+  }
+  return `<div class="freq-prof-block" id="freq-block-${p.id}">
+    <div class="freq-prof-header">
+      <div>
+        <div class="freq-prof-name">🎓 ${p.nome} ${p.turma?`<span class="badge badge-blue" style="font-size:0.7rem;">${p.turma}</span>`:''}</div>
+        <div style="display:flex;gap:8px;margin-top:5px;font-size:0.78rem;color:var(--gray600);">
+          <span style="color:var(--green);font-weight:700;">✅ ${pres}</span>
+          <span style="color:var(--red);font-weight:700;">❌ ${falt}</span>
+          ${total>0?`<span style="color:var(--blue2);font-weight:700;">${pct}%</span>`:''}
+        </div>
+      </div>
+      <button class="btn ${editing?'btn-blue':'btn-outline'} btn-sm" onclick="toggleFreqEdit('${p.id}')">
+        ${editing?'✔ Concluir':'✏️ Editar'}
+      </button>
+    </div>
+    ${editing ? '<div style="background:#dbeafe;border-radius:6px;padding:8px 12px;font-size:0.78rem;color:var(--blue);margin-bottom:10px;">Modo edição ativo — clique nas bolinhas para alterar.</div>' : ''}
+    ${monthsHtml}
+  </div>`;
+}
+
+function toggleFreqEdit(profId) {
+  freqEditMode[profId] = !freqEditMode[profId];
+  const p = state.professors.find(x => x.id === profId);
+  if (!p) return;
+  const block = document.getElementById('freq-block-'+profId);
+  if (block) block.outerHTML = renderFreqBlock(p);
+}
+function toggleDot(profId, key, el) {
+  if (!state.freq[profId]) state.freq[profId] = {};
+  const cur = state.freq[profId][key] || 0;
+  const next = (cur+1) % 3;
+  state.freq[profId][key] = next;
+  save();
+  el.className = 'dot ' + (next===1?'presente':next===2?'falta':'');
+  el.textContent = next===1?'P':next===2?'F':'';
+}
+
+// ══════════════════════════════════
+// FREQUÊNCIA — ALUNOS
+// ══════════════════════════════════
+function switchFreqTab(tab, btn) {
+  document.querySelectorAll('.freq-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.freq-tab-content').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('freq-tab-'+tab).classList.add('active');
+  if (tab === 'alunos') renderFreqAlunos();
+}
+
+function renderFreqAlunos() {
+  const el = document.getElementById('freq-alunos-content');
+  if (!state.classes.length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">🏫</div><p>Cadastre classes primeiro.</p></div>'; return;
+  }
+  // Get today's sunday-ish key for "aula de hoje"
+  const tk = todayKey();
+  el.innerHTML = state.classes.map(cl => renderAlunosBlock(cl, tk)).join('');
+}
+
+function renderAlunosBlock(cl, todayKeyVal) {
+  if (!state.students[cl.id]) state.students[cl.id] = [];
+  const students = state.students[cl.id];
+  const prof = state.professors.find(p => p.id === cl.profId);
+  const aux = state.professors.find(p => p.id === cl.auxId);
+
+  // Compute stats
+  let statsHtml = '';
+  if (students.length) {
+    const allSundays = [];
+    for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => allSundays.push(dateKey(s)));
+    statsHtml = students.map(st => {
+      if (!state.studFreq[st.id]) state.studFreq[st.id] = {};
+      let pres=0, falt=0, total=0;
+      allSundays.forEach(k => {
+        const v = state.studFreq[st.id][k]||0;
+        if (v>0) { total++; if(v===1) pres++; else falt++; }
+      });
+      const pct = total>0 ? Math.round(pres/total*100) : null;
+      const todayVal = state.studFreq[st.id][todayKeyVal]||0;
+      const todayBadge = todayVal===1?'<span class="badge badge-green">P</span>':todayVal===2?'<span class="badge badge-red">F</span>':'<span class="badge badge-gray">—</span>';
+      return `<tr>
+        <td><strong>${st.nome}</strong></td>
+        <td>${st.sexo ? `<span class="badge badge-${st.sexo.toLowerCase()}">${st.sexo==='F'?'Fem':'Masc'}</span>` : '—'}</td>
+        <td>${todayBadge}
+          <button class="btn btn-outline btn-sm" style="margin-left:6px;" onclick="toggleStudFreqToday('${st.id}','${todayKeyVal}',this)">Marcar</button>
+        </td>
+        <td><span style="color:var(--green);font-weight:700;">✅ ${pres}</span> <span style="color:var(--red);font-weight:700;">❌ ${falt}</span></td>
+        <td>
+          ${pct!==null ? `<div style="display:flex;align-items:center;gap:8px;">
+            <div class="pct-bar-wrap"><div class="pct-bar" style="width:${pct}%;background:${pct>=75?'var(--green)':pct>=50?'var(--blue2)':'var(--red)'}"></div></div>
+            <span style="font-size:0.8rem;font-weight:700;color:${pct>=75?'var(--green)':pct>=50?'var(--blue2)':'var(--red)'}">${pct}%</span>
+          </div>` : '<span style="font-size:0.78rem;color:var(--gray400);">sem dados</span>'}
+        </td>
+        <td>
+          <button class="btn btn-outline btn-sm" onclick="openEditStudent('${cl.id}','${st.id}')">✏️</button>
+          <button class="btn btn-red btn-sm" onclick="deleteStudent('${cl.id}','${st.id}')">✕</button>
+        </td>
+      </tr>`;
+    }).join('');
+  }
+
+  return `<div class="aluno-freq-block">
+    <div class="aluno-freq-header">
+      <div>
+        <strong style="font-size:0.95rem;">🏫 ${cl.nome}</strong>
+        <div style="font-size:0.78rem;color:var(--gray400);margin-top:3px;">
+          ${prof?`🎓 ${prof.nome}`:''} ${aux?`• 🧑‍🏫 Aux: ${aux.nome}`:''}
+        </div>
+      </div>
+      <span class="badge badge-blue">${students.length} aluno(s)</span>
+    </div>
+    <!-- Add aluno -->
+    <div class="aluno-add-row">
+      <div class="form-group"><label>Nome do Aluno</label><input type="text" id="al-nome-${cl.id}" placeholder="Nome completo"></div>
+      <div class="form-group" style="max-width:130px;"><label>Sexo</label>
+        <select id="al-sexo-${cl.id}"><option value="">-</option><option value="M">Masculino</option><option value="F">Feminino</option></select>
+      </div>
+      <button class="btn btn-blue btn-sm" style="margin-bottom:1px;" onclick="addStudent('${cl.id}')">➕ Adicionar</button>
+    </div>
+    ${students.length ? `
+    <div style="overflow-x:auto;">
+      <table class="data-table">
+        <thead><tr><th>Nome</th><th>Sexo</th><th>Hoje (${fmtDateFromKey(todayKeyVal)})</th><th>Presenças/Faltas</th><th>% Frequência</th><th>Ações</th></tr></thead>
+        <tbody>${statsHtml}</tbody>
+      </table>
+    </div>` : '<div style="font-size:0.84rem;color:var(--gray400);padding:8px 0;">Nenhum aluno cadastrado nesta classe.</div>'}
+  </div>`;
+}
+
+function fmtDateFromKey(k) {
+  if (!k) return '—';
+  const [y,m,d] = k.split('-');
+  return `${d}/${m}`;
+}
+
+function addStudent(classId) {
+  const nome = document.getElementById('al-nome-'+classId).value.trim();
+  if (!nome) { showToast('Informe o nome do aluno!'); return; }
+  if (!state.students[classId]) state.students[classId] = [];
+  const st = {
+    id: Date.now().toString(),
+    nome,
+    sexo: document.getElementById('al-sexo-'+classId).value,
+  };
+  state.students[classId].push(st);
+  save();
+  document.getElementById('al-nome-'+classId).value = '';
+  document.getElementById('al-sexo-'+classId).value = '';
+  renderFreqAlunos();
+  showToast('Aluno adicionado! 👨‍🎓');
+}
+
+function deleteStudent(classId, studentId) {
+  if (!confirm('Remover este aluno?')) return;
+  if (state.students[classId]) state.students[classId] = state.students[classId].filter(s => s.id !== studentId);
+  delete state.studFreq[studentId];
+  save(); renderFreqAlunos(); showToast('Aluno removido.');
+}
+
+function openEditStudent(classId, studentId) {
+  const st = (state.students[classId]||[]).find(s => s.id === studentId);
+  if (!st) return;
+  document.getElementById('modal-title').textContent = 'Editar Aluno';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nome</label><input id="est-nome" value="${st.nome||''}"></div>
+      <div class="form-group"><label>Sexo</label><select id="est-sexo">
+        <option value="">-</option>
+        <option value="M" ${st.sexo==='M'?'selected':''}>Masculino</option>
+        <option value="F" ${st.sexo==='F'?'selected':''}>Feminino</option>
+      </select></div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  window._modalSave = () => {
+    st.nome = document.getElementById('est-nome').value;
+    st.sexo = document.getElementById('est-sexo').value;
+    save(); renderFreqAlunos(); closeModal(); showToast('Aluno atualizado!');
+  };
+}
+
+function toggleStudFreqToday(studentId, key, btn) {
+  if (!state.studFreq[studentId]) state.studFreq[studentId] = {};
+  const cur = state.studFreq[studentId][key] || 0;
+  const next = (cur + 1) % 3;
+  state.studFreq[studentId][key] = next;
+  save();
+  // Update the badge next to the button
+  const td = btn.parentElement;
+  const badge = td.querySelector('.badge');
+  if (badge) {
+    badge.className = 'badge ' + (next===1?'badge-green':next===2?'badge-red':'badge-gray');
+    badge.textContent = next===1?'P':next===2?'F':'—';
+  }
+  showToast(next===1?'✅ Presente':next===2?'❌ Falta':'⚪ Limpo');
+}
+
+// ══════════════════════════════════
+// DESTAQUE
+// ══════════════════════════════════
+let destaqueChart = null;
+
+function loadDestaqueFields() {
+  const d = state.destaque;
+  const destData = document.getElementById('dest-data');
+  if (destData) destData.value = d.data || todayBR();
+  ['matr','pres','aus','assist','bib','oferta'].forEach(f => {
+    const el = document.getElementById('dest-'+f);
+    if (el) el.value = d[f]||'';
+  });
+}
+function saveDestaque() {
+  state.destaque = {
+    data: document.getElementById('dest-data').value,
+    matr: document.getElementById('dest-matr').value,
+    pres: document.getElementById('dest-pres').value,
+    aus: document.getElementById('dest-aus').value,
+    assist: document.getElementById('dest-assist').value,
+    bib: document.getElementById('dest-bib').value,
+    oferta: document.getElementById('dest-oferta').value,
+  };
+  save(); updateBoletim(); showToast('Destaque salvo! 🌟');
+}
+function updateBoletim() {
+  const d = {
+    data: document.getElementById('dest-data')?.value || state.destaque.data || '',
+    matr: document.getElementById('dest-matr')?.value || state.destaque.matr || 0,
+    pres: document.getElementById('dest-pres')?.value || state.destaque.pres || 0,
+    aus: document.getElementById('dest-aus')?.value || state.destaque.aus || 0,
+    assist: document.getElementById('dest-assist')?.value || state.destaque.assist || 0,
+    bib: document.getElementById('dest-bib')?.value || state.destaque.bib || 0,
+    oferta: document.getElementById('dest-oferta')?.value || state.destaque.oferta || 0,
+  };
+  const igNome = state.church.nome || 'ASSEMBLEIA DE DEUS';
+  document.getElementById('prev-igname').textContent = igNome.toUpperCase();
+  document.getElementById('prev-date').textContent = d.data ? 'EBD — '+d.data : 'EBD — Domingo';
+  document.getElementById('prev-matr').textContent = d.matr||0;
+  document.getElementById('prev-pres').textContent = d.pres||0;
+  document.getElementById('prev-aus').textContent = d.aus||0;
+  document.getElementById('prev-assist').textContent = d.assist||0;
+  document.getElementById('prev-bib').textContent = d.bib||0;
+  document.getElementById('prev-oferta').textContent = 'R$ '+(parseFloat(d.oferta||0)).toFixed(2).replace('.',',');
+
+  // Chart
+  const ctx = document.getElementById('destaque-chart');
+  if (ctx) {
+    if (destaqueChart) destaqueChart.destroy();
+    destaqueChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: ['Matriculados','Presentes','Ausentes','Assistência','Bíblias'],
+        datasets: [{
+          label: 'Destaque do Dia',
+          data: [
+            parseInt(d.matr)||0,parseInt(d.pres)||0,parseInt(d.aus)||0,
+            parseInt(d.assist)||0,parseInt(d.bib)||0
+          ],
+          backgroundColor: ['#818cf8','#34d399','#f87171','#60a5fa','#a78bfa'],
+          borderRadius: 8,
+          borderSkipped: false,
+        }]
+      },
+      options: {
+        responsive:true,
+        plugins:{legend:{display:false},tooltip:{callbacks:{label:ctx=>'Valor: '+ctx.parsed.y}}},
+        scales:{y:{beginAtZero:true,grid:{color:'rgba(99,102,241,0.1)'},ticks:{color:'#6366f1'}},
+                x:{grid:{display:false},ticks:{color:'#6366f1'}}}
+      }
+    });
+  }
+}
+
+// ══════════════════════════════════
+// EXPORT
+// ══════════════════════════════════
+function getStudentFreqText() {
+  if (!state.classes.length) return '';
+  const tk = todayKey();
+  let txt = '\n📚 *ALUNOS — FREQUÊNCIA DO DIA*\n';
+  state.classes.forEach(cl => {
+    const students = state.students[cl.id] || [];
+    if (!students.length) return;
+    txt += `\n🏫 *${cl.nome}*\n`;
+    students.forEach(st => {
+      const v = (state.studFreq[st.id]||{})[tk]||0;
+      const mark = v===1?'✅':v===2?'❌':'⚪';
+      txt += `  ${mark} ${st.nome}\n`;
+    });
+  });
+  return txt;
+}
+
+function exportPNG() {
+  updateBoletim();
+  showToast('Gerando imagem...');
+  setTimeout(() => {
+    try {
+      const d = state.destaque;
+      const ig = state.church;
+      const date = d.data || todayBR();
+      const tk = todayKey();
+
+      // ── collect student lines ──
+      const studentLines = []; // {text, type:'header'|'class'|'row'}
+      state.classes.forEach(cl => {
+        const students = state.students[cl.id] || [];
+        if (!students.length) return;
+        studentLines.push({text: cl.nome.toUpperCase(), type:'class'});
+        students.forEach(st => {
+          const v = (state.studFreq[st.id]||{})[tk]||0;
+          const mark = v===1?'[P]':v===2?'[F]':'[ ]';
+          let pres=0, tot=0;
+          for(let m=0;m<12;m++) SUNDAYS[m].forEach(s=>{const vv=(state.studFreq[st.id]||{})[dateKey(s)]||0;if(vv>0){tot++;if(vv===1)pres++;}});
+          const pct = tot>0?Math.round(pres/tot*100):null;
+          studentLines.push({text: `  ${mark}  ${st.nome}${pct!==null?'  '+pct+'%':''}`, type:'row', v});
+        });
+      });
+
+      // ── dimensions ──
+      const scale = 2;
+      const W = 800 * scale;
+      const PAD = 40 * scale;
+      const lineH = 28 * scale;
+      const sectionH = 36 * scale;
+      const statW = (W - PAD*2) / 6;
+
+      // header block height
+      const headerH = 100 * scale;
+      // stats block
+      const statsH = 120 * scale;
+      // divider
+      const divH = 4 * scale;
+      // student section
+      const studTitleH = studentLines.length ? sectionH + 10*scale : 0;
+      const studBodyH = studentLines.length * lineH + 20*scale;
+      // footer
+      const footH = 44 * scale;
+
+      const totalH = headerH + statsH + divH + studTitleH + studBodyH + footH + PAD;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = W;
+      canvas.height = totalH;
+      const ctx = canvas.getContext('2d');
+
+      // ── background ──
+      ctx.fillStyle = '#eef2ff';
+      ctx.fillRect(0, 0, W, totalH);
+
+      // ── header band ──
+      const grad = ctx.createLinearGradient(0,0,W,0);
+      grad.addColorStop(0,'#312e81'); grad.addColorStop(1,'#1e3a8a');
+      ctx.fillStyle = grad;
+      ctx.fillRect(0, 0, W, headerH);
+
+      // church name
+      ctx.fillStyle = '#ffffff';
+      ctx.font = `bold ${22*scale}px 'Arial',sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText((ig.nome||'ASSEMBLEIA DE DEUS').toUpperCase(), W/2, 38*scale);
+      ctx.fillStyle = '#a5b4fc';
+      ctx.font = `${13*scale}px 'Arial',sans-serif`;
+      ctx.fillText(`EBD — ${date}  |  ${ig.denom||''}`, W/2, 62*scale);
+      ctx.fillStyle = '#818cf8';
+      ctx.font = `${11*scale}px 'Arial',sans-serif`;
+      ctx.fillText(`Gerado em: ${new Date().toLocaleDateString('pt-BR')} ${new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'})}`, W/2, 84*scale);
+
+      // ── stat cards ──
+      const stats = [
+        {lbl:'Matriculados', val: d.matr||0, bg:'#e0e7ff', col:'#3730a3'},
+        {lbl:'Presentes',    val: d.pres||0, bg:'#dcfce7', col:'#15803d'},
+        {lbl:'Ausentes',     val: d.aus||0,  bg:'#fee2e2', col:'#b91c1c'},
+        {lbl:'Assistência',  val: d.assist||0,bg:'#dbeafe',col:'#1d4ed8'},
+        {lbl:'Bíblias',      val: d.bib||0,  bg:'#f3e8ff', col:'#7c3aed'},
+        {lbl:'Ofertas',      val:'R$'+(parseFloat(d.oferta||0).toFixed(2).replace('.',',')), bg:'#fef9c3', col:'#854d0e'},
+      ];
+      const cardW = statW - 8*scale;
+      const cardH = statsH - 20*scale;
+      const cardY = headerH + 10*scale;
+      stats.forEach((s,i) => {
+        const cx = PAD + i*statW;
+        // card bg
+        ctx.fillStyle = s.bg;
+        roundRect(ctx, cx, cardY, cardW, cardH, 12*scale);
+        ctx.fill();
+        // value
+        ctx.fillStyle = s.col;
+        ctx.font = `bold ${22*scale}px 'Arial',sans-serif`;
+        ctx.textAlign = 'center';
+        ctx.fillText(String(s.val), cx+cardW/2, cardY+cardH*0.55);
+        // label
+        ctx.fillStyle = s.col;
+        ctx.font = `${10*scale}px 'Arial',sans-serif`;
+        ctx.fillText(s.lbl, cx+cardW/2, cardY+cardH*0.82);
+      });
+
+      let curY = headerH + statsH + divH;
+
+      // ── divider ──
+      ctx.fillStyle = '#c7d2fe';
+      ctx.fillRect(0, headerH+statsH, W, divH);
+
+      // ── student section ──
+      if (studentLines.length) {
+        // section title
+        ctx.fillStyle = '#312e81';
+        ctx.font = `bold ${14*scale}px 'Arial',sans-serif`;
+        ctx.textAlign = 'left';
+        ctx.fillText('LISTA DE ALUNOS — FREQUÊNCIA DO DIA  (' + date + ')', PAD, curY + 26*scale);
+        // underline
+        ctx.fillStyle = '#a5b4fc';
+        ctx.fillRect(PAD, curY+32*scale, W-PAD*2, 2*scale);
+        curY += sectionH + 8*scale;
+
+        studentLines.forEach(row => {
+          if (row.type === 'class') {
+            ctx.fillStyle = '#3730a3';
+            ctx.font = `bold ${13*scale}px 'Arial',sans-serif`;
+            ctx.textAlign = 'left';
+            ctx.fillText('🏫 ' + row.text, PAD, curY + lineH*0.72);
+          } else {
+            // status circle
+            const circR = 9*scale;
+            const circX = PAD + 14*scale;
+            const circY2 = curY + lineH*0.5;
+            if (row.v===1) { ctx.fillStyle='#16a34a'; }
+            else if (row.v===2) { ctx.fillStyle='#dc2626'; }
+            else { ctx.fillStyle='#d1d5db'; }
+            ctx.beginPath(); ctx.arc(circX, circY2, circR, 0, Math.PI*2); ctx.fill();
+            // P/F/— letter
+            ctx.fillStyle='#fff';
+            ctx.font=`bold ${9*scale}px 'Arial',sans-serif`;
+            ctx.textAlign='center';
+            ctx.fillText(row.v===1?'P':row.v===2?'F':'—', circX, circY2+3*scale);
+            // name
+            ctx.fillStyle='#1f2937';
+            ctx.font=`${12*scale}px 'Arial',sans-serif`;
+            ctx.textAlign='left';
+            ctx.fillText(row.text.replace(/^\s+\[[PF ]\]\s+/,''), PAD+28*scale, curY+lineH*0.72);
+          }
+          curY += lineH;
+        });
+      }
+
+      // ── footer ──
+      ctx.fillStyle = '#312e81';
+      ctx.fillRect(0, canvas.height-footH, W, footH);
+      ctx.fillStyle = '#a5b4fc';
+      ctx.font = `${11*scale}px 'Arial',sans-serif`;
+      ctx.textAlign = 'center';
+      ctx.fillText('EBD Frequência Geral 2026 — ' + (ig.nome||'Assembleia de Deus'), W/2, canvas.height - footH/2 + 5*scale);
+
+      // ── save ──
+      const link = document.createElement('a');
+      link.download = 'ebd-boletim-' + date.replace(/\//g,'-') + '.png';
+      link.href = canvas.toDataURL('image/png');
+      document.body.appendChild(link); link.click(); document.body.removeChild(link);
+      showToast('PNG gerado com sucesso! 🖼️');
+    } catch(err) {
+      console.error(err);
+      showToast('Erro ao gerar PNG: ' + err.message);
+    }
+  }, 150);
+}
+
+function roundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath();
+  ctx.moveTo(x+r, y);
+  ctx.lineTo(x+w-r, y);
+  ctx.quadraticCurveTo(x+w, y, x+w, y+r);
+  ctx.lineTo(x+w, y+h-r);
+  ctx.quadraticCurveTo(x+w, y+h, x+w-r, y+h);
+  ctx.lineTo(x+r, y+h);
+  ctx.quadraticCurveTo(x, y+h, x, y+h-r);
+  ctx.lineTo(x, y+r);
+  ctx.quadraticCurveTo(x, y, x+r, y);
+  ctx.closePath();
+}
+
+function getDestaqueText() {
+  const d = state.destaque;
+  const ig = state.church.nome||'Assembleia de Deus';
+  const cong = state.church.denom ? ` — ${state.church.denom}` : '';
+  return `✝ *${ig}${cong}*\n📅 EBD — ${d.data||'Domingo'}\n\n` +
+    `👥 Matriculados: *${d.matr||0}*\n` +
+    `✅ Presentes: *${d.pres||0}*\n` +
+    `❌ Ausentes: *${d.aus||0}*\n` +
+    `🙌 Assistência: *${d.assist||0}*\n` +
+    `📖 Bíblias: *${d.bib||0}*\n` +
+    `💰 Ofertas: *R$ ${parseFloat(d.oferta||0).toFixed(2).replace('.',',')}*` +
+    getStudentFreqText() +
+    `\n\n_Relatório EBD Frequência Geral 2026_`;
+}
+function shareWhatsApp() {
+  window.open('https://wa.me/?text='+encodeURIComponent(getDestaqueText()), '_blank');
+}
+function shareEmail() {
+  const subj = encodeURIComponent('Boletim EBD — '+(state.church.nome||'Igreja'));
+  const body = encodeURIComponent(getDestaqueText().replace(/\*/g,''));
+  window.open(`mailto:?subject=${subj}&body=${body}`);
+}
+
+function renderFreqSummary() {
+  const el = document.getElementById('export-freq-summary');
+  if (!state.professors.length && !Object.keys(state.students).length) {
+    el.innerHTML = '<div class="empty-state"><div class="ei">📊</div><p>Nenhum dado ainda.</p></div>'; return;
+  }
+  let html = '';
+  if (state.professors.length) {
+    html += '<div style="font-weight:700;color:var(--blue2);font-size:0.8rem;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;">Professores</div>';
+    html += state.professors.map(p => {
+      const pf = state.freq[p.id] || {};
+      let total=0, pres=0, falt=0;
+      for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => {
+        const v = pf[dateKey(s)]||0;
+        if (v>0) { total++; if(v===1) pres++; else falt++; }
+      });
+      const pct = total>0 ? Math.round(pres/total*100) : null;
+      return `<div style="display:flex;align-items:center;gap:12px;padding:9px 0;border-bottom:1px solid var(--gray100);flex-wrap:wrap;">
+        <div style="flex:1;font-weight:700;font-size:0.88rem;">${p.nome}</div>
+        <div style="display:flex;gap:10px;font-size:0.82rem;">
+          <span style="color:var(--green);font-weight:700;">✅ ${pres}</span>
+          <span style="color:var(--red);font-weight:700;">❌ ${falt}</span>
+          ${pct!==null?`<span style="color:var(--blue2);font-weight:700;">${pct}%</span>`:'<span style="color:var(--gray400);">sem registros</span>'}
+        </div>
+      </div>`;
+    }).join('');
+  }
+  el.innerHTML = html;
+}
+
+// ══════════════════════════════════
+// PDF EXPORT (enhanced with students)
+// ══════════════════════════════════
+function exportPDF() {
+  showToast('Gerando PDF...');
+  setTimeout(() => {
+    try {
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const W = 210, margin = 15;
+      let y = margin;
+
+      function setFont(style, size) { doc.setFont('helvetica', style); doc.setFontSize(size); }
+      function line(text, yPos, align='left') {
+        doc.text(text, align==='center'?(W/2):align==='right'?(W-margin):margin, yPos, {align});
+      }
+      function hLine(yPos, color=[200,200,200]) {
+        doc.setDrawColor(...color); doc.setLineWidth(0.3);
+        doc.line(margin, yPos, W-margin, yPos);
+      }
+      function box(x,yy,w,h,fill=[240,242,245]) {
+        doc.setFillColor(...fill); doc.setDrawColor(200,200,200);
+        doc.roundedRect(x, yy, w, h, 2, 2, 'FD');
+      }
+      function newPageIfNeeded(need) {
+        if (y + need > 275) { doc.addPage(); y = 20; }
+      }
+
+      const today = new Date().toLocaleDateString('pt-BR');
+      const ig = state.church;
+
+      // ── COVER ──
+      doc.setFillColor(17,24,39);
+      doc.rect(0, 0, W, 45, 'F');
+      setFont('bold', 20); doc.setTextColor(255,255,255);
+      line('RELATÓRIO GERAL EBD 2026', 18, 'center');
+      setFont('normal', 9); doc.setTextColor(156,163,175);
+      line('Escola Bíblica Dominical — Frequência Semestral', 26, 'center');
+      line(`${ig.nome||'Assembleia de Deus'} — ${ig.denom||''}`, 33, 'center');
+      line(`${ig.cidade||''} | Gerado em: ${today}`, 40, 'center');
+      y = 55;
+
+      // ── 1. DADOS DA IGREJA ──
+      setFont('bold', 12); doc.setTextColor(30,64,175);
+      line('1. DADOS DA IGREJA', y); y += 7;
+      hLine(y, [30,64,175]); y += 5;
+      [['Igreja:', ig.nome||'—'],['Congregação:', ig.denom||'—'],['Cidade/Estado:', ig.cidade||'—'],['Endereço:', ig.end||'—'],['Pastor:', ig.pastor||'—'],['Telefone:', ig.tel||'—']].forEach(([lbl,val]) => {
+        setFont('bold', 9); doc.setTextColor(75,85,99); doc.text(lbl, margin, y);
+        setFont('normal', 9); doc.setTextColor(17,24,39); doc.text(val, margin+32, y);
+        y += 6;
+      });
+      y += 4;
+
+      // ── 2. EQUIPE ──
+      newPageIfNeeded(40);
+      setFont('bold', 12); doc.setTextColor(30,64,175);
+      line('2. EQUIPE ADMINISTRATIVA', y); y += 7;
+      hLine(y, [30,64,175]); y += 5;
+      const coord = state.coord, sec = state.sec;
+      box(margin, y, (W-2*margin)/2-4, 28);
+      setFont('bold', 9); doc.setTextColor(30,64,175);
+      doc.text('COORDENADOR', margin+4, y+6);
+      setFont('normal', 9); doc.setTextColor(17,24,39);
+      doc.text(coord.nome||'Não informado', margin+4, y+12);
+      doc.text(coord.tel||'', margin+4, y+18);
+      doc.text(coord.email||'', margin+4, y+24);
+      const sx = margin + (W-2*margin)/2 + 4;
+      box(sx, y, (W-2*margin)/2-4, 28);
+      setFont('bold', 9); doc.setTextColor(30,64,175);
+      doc.text('SECRETÁRIA', sx+4, y+6);
+      setFont('normal', 9); doc.setTextColor(17,24,39);
+      doc.text(sec.nome||'Não informado', sx+4, y+12);
+      doc.text(sec.tel||'', sx+4, y+18);
+      doc.text(sec.funcao||'', sx+4, y+24);
+      y += 36;
+
+      // ── 3. LISTA DE PROFESSORES ──
+      newPageIfNeeded(30);
+      setFont('bold', 12); doc.setTextColor(30,64,175);
+      line('3. LISTA DE PROFESSORES', y); y += 7;
+      hLine(y, [30,64,175]); y += 5;
+      if (!state.professors.length) {
+        setFont('italic', 9); doc.setTextColor(156,163,175); line('Nenhum professor cadastrado.', y); y += 10;
+      } else {
+        box(margin, y-3, W-2*margin, 8, [17,24,39]);
+        setFont('bold', 8); doc.setTextColor(255,255,255);
+        const cols = [margin+2,margin+52,margin+70,margin+95,margin+118,margin+143,margin+162];
+        ['# Nome','Nasc.','Sexo','Telefone','Turma','Pres.','Falt.'].forEach((h,i) => doc.text(h, cols[i], y+2));
+        y += 9;
+        state.professors.forEach((p,idx) => {
+          newPageIfNeeded(8);
+          const pf = state.freq[p.id]||{};
+          let pres=0, falt=0;
+          for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => { const v=pf[dateKey(s)]||0; if(v===1) pres++; else if(v===2) falt++; });
+          if (idx%2===0) { doc.setFillColor(248,250,252); doc.rect(margin, y-3, W-2*margin, 7, 'F'); }
+          setFont('normal', 8); doc.setTextColor(17,24,39);
+          const vals = [`${idx+1}. ${p.nome}`, p.nasc||'—', p.sexo||'—', p.tel||'—', p.turma||'—', String(pres), String(falt)];
+          vals.forEach((v,i) => { const txt = i===0&&v.length>28?v.substring(0,27)+'…':v; doc.text(txt, cols[i], y+1); });
+          y += 7;
+        });
+      }
+      y += 6;
+
+      // ── 4. FREQUÊNCIA DE PROFESSORES ──
+      newPageIfNeeded(30);
+      setFont('bold', 12); doc.setTextColor(30,64,175);
+      line('4. FREQUÊNCIA DETALHADA POR PROFESSOR', y); y += 7;
+      hLine(y, [30,64,175]); y += 6;
+      state.professors.forEach(p => {
+        newPageIfNeeded(25);
+        const pf = state.freq[p.id]||{};
+        let pres=0, falt=0, total=0;
+        for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => { const v=pf[dateKey(s)]||0; if(v>0){total++;if(v===1)pres++;else falt++;} });
+        const pct = total>0 ? Math.round(pres/total*100) : 0;
+        box(margin, y-3, W-2*margin, 9, [17,24,39]);
+        setFont('bold', 9); doc.setTextColor(255,255,255);
+        doc.text(p.nome, margin+3, y+2);
+        setFont('normal', 8); doc.setTextColor(22,163,74);
+        doc.text(`✓ ${pres} pres.`, W-margin-55, y+2);
+        doc.setTextColor(220,38,38);
+        doc.text(`✗ ${falt} falt.`, W-margin-35, y+2);
+        doc.setTextColor(30,64,175);
+        doc.text(`${pct}%`, W-margin-10, y+2, {align:'right'});
+        y += 11;
+        let rowTxt = '';
+        for (let m=0;m<12;m++) {
+          let mp=0, mf=0;
+          SUNDAYS[m].forEach(s => { const v=pf[dateKey(s)]||0; if(v===1) mp++; else if(v===2) mf++; });
+          rowTxt += `${MONTHS_SHORT[m]}: P${mp}/F${mf}  `;
+        }
+        setFont('normal', 7); doc.setTextColor(107,114,128);
+        doc.text(rowTxt, margin+3, y); y += 8;
+      });
+
+      // ── 5. CLASSES ──
+      if (state.classes.length) {
+        newPageIfNeeded(20);
+        setFont('bold', 12); doc.setTextColor(30,64,175);
+        line('5. CLASSES DE ALUNOS', y); y += 7;
+        hLine(y, [30,64,175]); y += 6;
+        state.classes.forEach(cl => {
+          newPageIfNeeded(12);
+          const prof = state.professors.find(p => p.id === cl.profId);
+          const aux = state.professors.find(p => p.id === cl.auxId);
+          box(margin, y-3, W-2*margin, 8, [17,24,39]);
+          setFont('bold', 9); doc.setTextColor(255,255,255);
+          let clLine = `${cl.nome} — ${NIVEL_LABELS[cl.nivel]||cl.nivel}`;
+          if (prof) clLine += ` | Prof: ${prof.nome}`;
+          if (aux) clLine += ` | Aux: ${aux.nome}`;
+          doc.text(clLine, margin+3, y+2);
+          y += 11;
+          setFont('normal', 8); doc.setTextColor(75,85,99);
+          const info = [cl.faixa&&`Faixa: ${cl.faixa}`, cl.sala&&`Sala: ${cl.sala}`, cl.horario&&`Horário: ${cl.horario}`].filter(Boolean).join(' | ');
+          if (info) { doc.text(info, margin+3, y); y += 7; }
+        });
+      }
+
+      // ── 6. LISTA COMPLETA DE ALUNOS COM FREQUÊNCIA (data da aula = hoje) ──
+      const allStudents = [];
+      state.classes.forEach(cl => {
+        (state.students[cl.id]||[]).forEach(st => allStudents.push({st, cl}));
+      });
+      if (allStudents.length) {
+        newPageIfNeeded(30);
+        setFont('bold', 12); doc.setTextColor(30,64,175);
+        line('6. LISTA DE ALUNOS E FREQUÊNCIA', y); y += 5;
+        setFont('normal', 8); doc.setTextColor(107,114,128);
+        line(`Gerado em: ${today} | Data da aula considerada: ${state.destaque.data || today}`, y); y += 6;
+        hLine(y, [30,64,175]); y += 5;
+
+        const tk = todayKey();
+        // header
+        box(margin, y-3, W-2*margin, 8, [17,24,39]);
+        setFont('bold', 8); doc.setTextColor(255,255,255);
+        const aCols = [margin+2, margin+55, margin+75, margin+100, margin+128, margin+152, margin+168];
+        ['# Nome','Classe','Sexo','Hoje','Total P','Total F','%'].forEach((h,i) => doc.text(h, aCols[i], y+2));
+        y += 9;
+
+        allStudents.forEach(({st, cl}, idx) => {
+          newPageIfNeeded(8);
+          const sf = state.studFreq[st.id]||{};
+          let pres=0, falt=0;
+          for (let m=0;m<12;m++) SUNDAYS[m].forEach(s => { const v=sf[dateKey(s)]||0; if(v===1) pres++; else if(v===2) falt++; });
+          const total = pres+falt;
+          const pct = total>0?Math.round(pres/total*100):null;
+          const todayV = sf[tk]||0;
+          const todayMark = todayV===1?'P':todayV===2?'F':'—';
+
+          if (idx%2===0) { doc.setFillColor(248,250,252); doc.rect(margin, y-3, W-2*margin, 7, 'F'); }
+          setFont('normal', 8); doc.setTextColor(17,24,39);
+          const nm = `${idx+1}. ${st.nome}`;
+          doc.text(nm.length>24?nm.substring(0,23)+'…':nm, aCols[0], y+1);
+          doc.text((cl.nome||'').length>18?(cl.nome).substring(0,17)+'…':cl.nome, aCols[1], y+1);
+          doc.text(st.sexo||'—', aCols[2], y+1);
+
+          if (todayV===1) doc.setTextColor(22,163,74);
+          else if (todayV===2) doc.setTextColor(220,38,38);
+          else doc.setTextColor(107,114,128);
+          doc.text(todayMark, aCols[3], y+1);
+
+          doc.setTextColor(22,163,74); doc.text(String(pres), aCols[4], y+1);
+          doc.setTextColor(220,38,38); doc.text(String(falt), aCols[5], y+1);
+          doc.setTextColor(30,64,175); doc.text(pct!==null?`${pct}%`:'—', aCols[6], y+1);
+          y += 7;
+        });
+        y += 4;
+      }
+
+      // ── 7. DESTAQUE DO DIA ──
+      const d = state.destaque;
+      if (Object.keys(d).some(k=>d[k])) {
+        newPageIfNeeded(60);
+        setFont('bold', 12); doc.setTextColor(30,64,175);
+        line('7. DESTAQUE DO DIA', y); y += 7;
+        hLine(y, [30,64,175]); y += 5;
+        const fields = [
+          ['Data:', d.data||'—'],['Matriculados:', d.matr||0],['Presentes:', d.pres||0],
+          ['Ausentes:', d.aus||0],['Assistência:', d.assist||0],['Bíblias:', d.bib||0],
+          ['Ofertas:', `R$ ${parseFloat(d.oferta||0).toFixed(2).replace('.',',')}`]
+        ];
+        fields.forEach(([lbl,val]) => {
+          setFont('bold', 9); doc.setTextColor(75,85,99); doc.text(lbl, margin, y);
+          setFont('normal', 9); doc.setTextColor(17,24,39); doc.text(String(val), margin+40, y);
+          y += 6;
+        });
+      }
+
+      // ── FOOTER ──
+      const pages = doc.getNumberOfPages();
+      for (let i=1;i<=pages;i++) {
+        doc.setPage(i);
+        doc.setFillColor(17,24,39);
+        doc.rect(0, 290, W, 10, 'F');
+        setFont('normal', 7); doc.setTextColor(156,163,175);
+        doc.text(`EBD Frequência Geral 2026 — ${ig.nome||'Assembleia de Deus'}`, W/2, 296, {align:'center'});
+        doc.text(`Página ${i} de ${pages}`, W-margin, 296, {align:'right'});
+      }
+
+      doc.save(`ebd-relatorio-${today.replace(/\//g,'-')}.pdf`);
+      showToast('PDF gerado com sucesso! 📄');
+    } catch(err) {
+      console.error(err);
+      showToast('Erro ao gerar PDF: '+err.message);
+    }
+  }, 300);
+}
+
+// ══════════════════════════════════
+// DATE UTILS
+// ══════════════════════════════════
+function applyDateMask(input) {
+  input.addEventListener('input', function() {
+    let v = this.value.replace(/\D/g,'');
+    if (v.length > 2) v = v.slice(0,2)+'/'+v.slice(2);
+    if (v.length > 5) v = v.slice(0,5)+'/'+v.slice(5);
+    if (v.length > 10) v = v.slice(0,10);
+    this.value = v;
+  });
+}
+function todayBR() {
+  const now = new Date();
+  return String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear();
+}
+function initDateMasks() {
+  const nascInput = document.getElementById('pf-nasc');
+  if (nascInput) applyDateMask(nascInput);
+  const destDataInput = document.getElementById('dest-data');
+  if (destDataInput) { applyDateMask(destDataInput); if (!destDataInput.value) destDataInput.value = todayBR(); }
+}
+
+function saveModal() { if (window._modalSave) window._modalSave(); }
+function closeModal() {
+  document.getElementById('modal-overlay').classList.remove('open');
+  window._modalSave = null;
+}
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2800);
+}
+
+// ══════════════════════════════════════════
+// CADASTRO DE ALUNOS — página dedicada
+// ══════════════════════════════════════════
+
+function populateAlunosClassFilter() {
+  const selNew = document.getElementById('al-new-class');
+  const selFilter = document.getElementById('al-filter-class');
+  const opts = state.classes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
+  if (selNew) selNew.innerHTML = '<option value="">-- Selecione a classe --</option>' + opts;
+  if (selFilter) selFilter.innerHTML = '<option value="">Todas as classes</option>' + opts;
+  // apply date mask
+  const nascInput = document.getElementById('al-new-nasc');
+  if (nascInput) applyDateMask(nascInput);
+}
+
+function addAlunoPage() {
+  const nome = document.getElementById('al-new-nome').value.trim();
+  const classId = document.getElementById('al-new-class').value;
+  if (!nome) { showToast('Informe o nome do aluno!'); return; }
+  if (!classId) { showToast('Selecione a classe do aluno!'); return; }
+  if (!state.students[classId]) state.students[classId] = [];
+  const st = {
+    id: Date.now().toString(),
+    nome,
+    classId,
+    nasc: document.getElementById('al-new-nasc').value,
+    sexo: document.getElementById('al-new-sexo').value,
+    tel: document.getElementById('al-new-tel').value,
+    end: document.getElementById('al-new-end').value,
+    obs: document.getElementById('al-new-obs').value,
+  };
+  state.students[classId].push(st);
+  save();
+  ['al-new-nome','al-new-nasc','al-new-tel','al-new-end','al-new-obs'].forEach(id => {
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  document.getElementById('al-new-sexo').value='';
+  document.getElementById('al-new-class').value='';
+  renderAlunosPage();
+  showToast('Aluno cadastrado! 👨‍🎓');
+}
+
+function getAllStudents() {
+  const list = [];
+  state.classes.forEach(cl => {
+    (state.students[cl.id]||[]).forEach(st => list.push({...st, classId: cl.id, classNome: cl.nome}));
+  });
+  return list;
+}
+
+function renderAlunosPage() {
+  const all = getAllStudents();
+  const filterNome = (document.getElementById('al-filter-nome')?.value||'').toLowerCase();
+  const filterClass = document.getElementById('al-filter-class')?.value||'';
+  const filterSexo = document.getElementById('al-filter-sexo')?.value||'';
+
+  document.getElementById('alunos-total-badge').textContent = all.length;
+
+  const filtered = all.filter(st => {
+    if (filterNome && !st.nome.toLowerCase().includes(filterNome)) return false;
+    if (filterClass && st.classId !== filterClass) return false;
+    if (filterSexo && st.sexo !== filterSexo) return false;
+    return true;
+  });
+
+  // Summary card
+  const summaryCard = document.getElementById('alunos-summary-card');
+  if (all.length > 0) {
+    summaryCard.style.display = '';
+    let totalPres=0, totalFalt=0, totalReg=0;
+    all.forEach(st => {
+      const sf = state.studFreq[st.id]||{};
+      for(let m=0;m<12;m++) SUNDAYS[m].forEach(s=>{
+        const v=sf[dateKey(s)]||0;
+        if(v===1){totalPres++;totalReg++;}else if(v===2){totalFalt++;totalReg++;}
+      });
+    });
+    const pctGeral = totalReg>0?Math.round(totalPres/totalReg*100):0;
+    document.getElementById('alunos-summary').innerHTML = `
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;">
+        <div style="background:#eef2ff;border-radius:10px;padding:14px;text-align:center;border:1.5px solid #c7d2fe;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#4f46e5;">${all.length}</div>
+          <div style="font-size:0.72rem;color:#6366f1;text-transform:uppercase;letter-spacing:0.8px;">Total de Alunos</div>
+        </div>
+        <div style="background:#dcfce7;border-radius:10px;padding:14px;text-align:center;border:1.5px solid #86efac;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#16a34a;">${totalPres}</div>
+          <div style="font-size:0.72rem;color:#15803d;text-transform:uppercase;letter-spacing:0.8px;">Total Presenças</div>
+        </div>
+        <div style="background:#fee2e2;border-radius:10px;padding:14px;text-align:center;border:1.5px solid #fca5a5;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#dc2626;">${totalFalt}</div>
+          <div style="font-size:0.72rem;color:#b91c1c;text-transform:uppercase;letter-spacing:0.8px;">Total Faltas</div>
+        </div>
+        <div style="background:#dbeafe;border-radius:10px;padding:14px;text-align:center;border:1.5px solid #93c5fd;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#1d4ed8;">${pctGeral}%</div>
+          <div style="font-size:0.72rem;color:#1e40af;text-transform:uppercase;letter-spacing:0.8px;">% Freq. Geral</div>
+        </div>
+        <div style="background:#f3f4f6;border-radius:10px;padding:14px;text-align:center;border:1.5px solid #d1d5db;">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:2rem;color:#374151;">${state.classes.length}</div>
+          <div style="font-size:0.72rem;color:#6b7280;text-transform:uppercase;letter-spacing:0.8px;">Classes</div>
+        </div>
+      </div>`;
+  } else {
+    summaryCard.style.display = 'none';
+  }
+
+  const el = document.getElementById('alunos-list-page');
+  if (!filtered.length) {
+    el.innerHTML = `<div class="empty-state"><div class="ei">👨‍🎓</div><p>${all.length?'Nenhum aluno encontrado com os filtros.':'Nenhum aluno cadastrado ainda.'}</p></div>`;
+    return;
+  }
+
+  // Group by class
+  const byClass = {};
+  filtered.forEach(st => {
+    if (!byClass[st.classId]) byClass[st.classId] = {nome: st.classNome, alunos: []};
+    byClass[st.classId].alunos.push(st);
+  });
+
+  el.innerHTML = Object.entries(byClass).map(([clId, grp]) => {
+    const alunosHtml = grp.alunos.map(st => renderAlunoCard(st)).join('');
+    return `<div style="margin-bottom:20px;">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1.5px;color:var(--blue2);padding:8px 0 6px;border-bottom:2px solid var(--blue-light);margin-bottom:10px;">
+        🏫 ${grp.nome} <span style="font-size:0.75rem;color:var(--gray400);font-weight:400;">(${grp.alunos.length} aluno${grp.alunos.length!==1?'s':''})</span>
+      </div>
+      ${alunosHtml}
+    </div>`;
+  }).join('');
+}
+
+// editing state for aluno freq (same pattern as professors)
+const alunoEditMode = {}; // studentId → bool
+
+function renderAlunoCard(st) {
+  const sf = state.studFreq[st.id]||{};
+  let pres=0, falt=0, total=0;
+  for(let m=0;m<12;m++) SUNDAYS[m].forEach(s=>{
+    const v=sf[dateKey(s)]||0;
+    if(v>0){total++;if(v===1)pres++;else falt++;}
+  });
+  const pct = total>0?Math.round(pres/total*100):null;
+  const pctColor = pct===null?'var(--gray300)':pct>=75?'var(--green)':pct>=50?'var(--blue2)':'var(--red)';
+  const editing = alunoEditMode[st.id] || false;
+
+  // Build months rows (same as professors)
+  let monthsHtml = '';
+  for(let m=0;m<12;m++){
+    monthsHtml += `<div class="month-row"><div class="month-label">${MONTHS[m]}</div><div class="dots-row">`;
+    SUNDAYS[m].forEach(sun=>{
+      const key=dateKey(sun);
+      const v=sf[key]||0;
+      const cls=v===1?'presente':v===2?'falta':'';
+      const lbl=v===1?'P':v===2?'F':'';
+      const clickable = editing ? `onclick="toggleStudDot('${st.id}','${key}',this)"` : '';
+      const cursor = editing ? 'cursor:pointer;' : 'cursor:default;opacity:0.85;';
+      monthsHtml += `<div class="dot-wrap">
+        <div class="dot ${cls}" ${clickable} style="${cursor}" title="${fmtDate(sun)}">${lbl}</div>
+        <span class="dot-date">${fmtDate(sun)}</span>
+      </div>`;
+    });
+    monthsHtml += '</div></div>';
+  }
+
+  return `<div class="aluno-card" id="aluno-card-${st.id}">
+    <div class="aluno-card-header">
+      <div>
+        <div class="aluno-name">👨‍🎓 ${st.nome}
+          ${st.sexo?`<span class="badge badge-${st.sexo.toLowerCase()}" style="font-size:0.68rem;">${st.sexo==='F'?'Fem':'Masc'}</span>`:''}
+        </div>
+        <div class="aluno-meta">
+          ${st.classNome?`🏫 ${st.classNome}`:''}${st.nasc?` • 🎂 ${st.nasc}`:''}${st.tel?` • 📱 ${st.tel}`:''}
+        </div>
+        <div style="display:flex;gap:8px;margin-top:6px;font-size:0.78rem;color:var(--gray600);">
+          <span style="color:var(--green);font-weight:700;">✅ ${pres}</span>
+          <span style="color:var(--red);font-weight:700;">❌ ${falt}</span>
+          ${pct!==null?`<span style="color:${pctColor};font-weight:700;">${pct}%
+            <span style="display:inline-block;width:48px;height:7px;background:var(--gray200);border-radius:4px;vertical-align:middle;margin-left:4px;overflow:hidden;">
+              <span style="display:block;width:${pct}%;height:7px;background:${pctColor};border-radius:4px;"></span>
+            </span>
+          </span>`:''}
+        </div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center;">
+        <button class="btn ${editing?'btn-blue':'btn-outline'} btn-sm" onclick="toggleAlunoEdit('${st.id}','${st.classId}')">
+          ${editing?'✔ Concluir':'✏️ Editar'}
+        </button>
+        <button class="btn btn-outline btn-sm" onclick="openEditAlunoPage('${st.classId}','${st.id}')">⚙️</button>
+        <button class="btn btn-red btn-sm" onclick="deleteAlunoPage('${st.classId}','${st.id}')">✕</button>
+      </div>
+    </div>
+    <div class="aluno-card-body">
+      ${editing?'<div style="background:#dbeafe;border-radius:6px;padding:8px 12px;font-size:0.78rem;color:var(--blue);margin-bottom:10px;">Modo edição ativo — clique nas bolinhas para marcar presença/falta.</div>':''}
+      ${st.obs?`<div style="font-size:0.78rem;color:var(--gray600);margin-bottom:10px;padding:6px 10px;background:var(--gray50);border-radius:6px;">📝 ${st.obs}</div>`:''}
+      ${monthsHtml}
+    </div>
+  </div>`;
+}
+
+function toggleAlunoEdit(studentId, classId) {
+  alunoEditMode[studentId] = !alunoEditMode[studentId];
+  // find the student
+  let found = null;
+  state.classes.forEach(cl => {
+    const s = (state.students[cl.id]||[]).find(x=>x.id===studentId);
+    if (s) found = {...s, classId:cl.id, classNome:cl.nome};
+  });
+  const card = document.getElementById('aluno-card-'+studentId);
+  if (card && found) card.outerHTML = renderAlunoCard(found);
+}
+
+function toggleStudDot(studentId, key, el) {
+  if (!state.studFreq[studentId]) state.studFreq[studentId] = {};
+  const cur = state.studFreq[studentId][key]||0;
+  const next = (cur+1)%3;
+  state.studFreq[studentId][key] = next;
+  save();
+  el.className = 'dot ' + (next===1?'presente':next===2?'falta':'');
+  el.textContent = next===1?'P':next===2?'F':'';
+  // refresh stats header on the card without re-rendering the whole thing
+  const card = document.getElementById('aluno-card-'+studentId);
+  if (card) {
+    let found = null;
+    state.classes.forEach(cl => {
+      const s = (state.students[cl.id]||[]).find(x=>x.id===studentId);
+      if (s) found = {...s, classId:cl.id, classNome:cl.nome};
+    });
+    if (found) card.outerHTML = renderAlunoCard(found);
+    // re-open edit mode visually since card was re-rendered
+    // alunoEditMode[studentId] is still true, so the re-render will show correctly
+  }
+}
+
+function openEditAlunoPage(classId, studentId) {
+  const st = (state.students[classId]||[]).find(s=>s.id===studentId);
+  if (!st) return;
+  const classOpts = state.classes.map(c=>`<option value="${c.id}" ${c.id===classId?'selected':''}>${c.nome}</option>`).join('');
+  document.getElementById('modal-title').textContent = 'Editar Aluno';
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-grid">
+      <div class="form-group full"><label>Nome</label><input id="eal-nome" value="${st.nome||''}"></div>
+      <div class="form-group"><label>Classe</label><select id="eal-class"><option value="">--</option>${classOpts}</select></div>
+      <div class="form-group"><label>Nascimento</label><input id="eal-nasc" value="${st.nasc||''}" placeholder="DD/MM/AAAA" maxlength="10"></div>
+      <div class="form-group"><label>Sexo</label><select id="eal-sexo">
+        <option value="">-</option>
+        <option value="M" ${st.sexo==='M'?'selected':''}>Masculino</option>
+        <option value="F" ${st.sexo==='F'?'selected':''}>Feminino</option>
+      </select></div>
+      <div class="form-group"><label>Telefone</label><input id="eal-tel" value="${st.tel||''}"></div>
+      <div class="form-group"><label>Endereço</label><input id="eal-end" value="${st.end||''}"></div>
+      <div class="form-group full"><label>Observações</label><input id="eal-obs" value="${st.obs||''}"></div>
+    </div>`;
+  document.getElementById('modal-overlay').classList.add('open');
+  applyDateMask(document.getElementById('eal-nasc'));
+  window._modalSave = () => {
+    const newClassId = document.getElementById('eal-class').value || classId;
+    // Move to new class if changed
+    if (newClassId !== classId) {
+      state.students[classId] = (state.students[classId]||[]).filter(s=>s.id!==studentId);
+      if (!state.students[newClassId]) state.students[newClassId] = [];
+      state.students[newClassId].push({...st, classId: newClassId});
+      const moved = state.students[newClassId].find(s=>s.id===studentId);
+      if (moved) {
+        moved.nome = document.getElementById('eal-nome').value;
+        moved.nasc = document.getElementById('eal-nasc').value;
+        moved.sexo = document.getElementById('eal-sexo').value;
+        moved.tel = document.getElementById('eal-tel').value;
+        moved.end = document.getElementById('eal-end').value;
+        moved.obs = document.getElementById('eal-obs').value;
+      }
+    } else {
+      st.nome = document.getElementById('eal-nome').value;
+      st.nasc = document.getElementById('eal-nasc').value;
+      st.sexo = document.getElementById('eal-sexo').value;
+      st.tel = document.getElementById('eal-tel').value;
+      st.end = document.getElementById('eal-end').value;
+      st.obs = document.getElementById('eal-obs').value;
+    }
+    save(); renderAlunosPage(); closeModal(); showToast('Aluno atualizado!');
+  };
+}
+
+function deleteAlunoPage(classId, studentId) {
+  if (!confirm('Remover este aluno permanentemente?')) return;
+  state.students[classId] = (state.students[classId]||[]).filter(s=>s.id!==studentId);
+  delete state.studFreq[studentId];
+  save(); renderAlunosPage(); showToast('Aluno removido.');
+}
+
+// ══════════════════════════════════
+// KEYBOARD ENTER ON LOGIN
+// ══════════════════════════════════
+document.getElementById('login-user').addEventListener('keydown', e => { if(e.key==='Enter') document.getElementById('login-pass').focus(); });
+</script>
+<!-- PWA Install Banner -->
+<div id="pwa-banner">
+  <div class="pwa-banner-icon">📲</div>
+  <div class="pwa-banner-text">
+    <strong>Instalar EBD 2026</strong>
+    <span>Acesse offline, como um app nativo</span>
+  </div>
+  <div class="pwa-banner-btns">
+    <button class="pwa-install-btn" id="pwa-install-btn">Instalar</button>
+    <button class="pwa-dismiss-btn" id="pwa-dismiss-btn">✕</button>
+  </div>
+</div>
+
+<!-- Offline badge -->
+<div id="offline-badge">📵 Sem conexão — modo offline</div>
+
+<script>
+// ══════════════════════════════════════
+// SERVICE WORKER REGISTRATION
+// ══════════════════════════════════════
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('SW registered:', reg.scope))
+      .catch(err => console.warn('SW registration failed:', err));
+  });
+}
+
+// ══════════════════════════════════════
+// PWA INSTALL PROMPT
+// ══════════════════════════════════════
+let deferredPrompt = null;
+const banner = document.getElementById('pwa-banner');
+const installBtn = document.getElementById('pwa-install-btn');
+const dismissBtn = document.getElementById('pwa-dismiss-btn');
+
+window.addEventListener('beforeinstallprompt', e => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show banner after 2s if not dismissed before
+  if (!localStorage.getItem('pwa-dismissed')) {
+    setTimeout(() => banner.classList.add('show'), 2000);
+  }
+});
+
+installBtn.addEventListener('click', async () => {
+  if (!deferredPrompt) return;
+  banner.classList.remove('show');
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  if (outcome === 'accepted') showToast('App instalado com sucesso! 🎉');
+  deferredPrompt = null;
+});
+
+dismissBtn.addEventListener('click', () => {
+  banner.classList.remove('show');
+  localStorage.setItem('pwa-dismissed', '1');
+});
+
+// Hide banner if already installed
+window.addEventListener('appinstalled', () => {
+  banner.classList.remove('show');
+  deferredPrompt = null;
+  showToast('EBD 2026 instalado! 📲');
+});
+
+// ══════════════════════════════════════
+// OFFLINE DETECTION
+// ══════════════════════════════════════
+const offlineBadge = document.getElementById('offline-badge');
+function updateOnlineStatus() {
+  if (!navigator.onLine) {
+    offlineBadge.classList.add('show');
+  } else {
+    offlineBadge.classList.remove('show');
+  }
+}
+window.addEventListener('online', updateOnlineStatus);
+window.addEventListener('offline', updateOnlineStatus);
+updateOnlineStatus();
+</script>
+</body>
+</html>
